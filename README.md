@@ -7,12 +7,13 @@ Landing estática de PEAK (exportada de Claude Design). No necesita build: `inde
 En `index.html`, buscá el comentario `// ── Datos editables: actualizá precios y stock acá ──` y editá el array `PRODUCTS`:
 
 ```js
-{ name: 'Creatina Star Nutrition', flavors: ['Sin sabor'], description: '...', price: 25500, image: 'creatina-star.jpg', stock: true },
+{ name: 'Creatina Star Nutrition', flavors: ['Sin sabor'], description: '...', price: 25500, image: 'uploads/creatina-star.webp', alt: 'Bolsa de Creatina Star Nutrition…', stock: true },
 ```
 
 - `price`: número entero en pesos, **sin** `$` ni puntos (se formatea solo como `$25.500`).
 - `stock`: `true` = "Pedir"; `false` = muestra "Sin stock" y el botón pasa a "encargue".
-- `image`: ruta relativa a la foto (por ejemplo `uploads/creatina-star.jpg`). Si falta, se muestra el nombre del producto.
+- `image`: ruta a la foto en `uploads/` (WebP, máx. 1000px de lado, < 200 KB), por ejemplo `uploads/creatina-star.webp`. Se muestra entera (`contain`). Si falta, se ve "PEAK." en su lugar.
+- `alt`: descripción de la foto, por ejemplo "Pote de Whey Protein ENA sabor vainilla y chocolate".
 - Para agregar un producto, copiá una línea y cambiá los valores; para sacarlo, borrá la línea.
 
 - `hidden: true`: oculta la card sin borrarla (sacalo para volver a mostrarla).

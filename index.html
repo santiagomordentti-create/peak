@@ -63,6 +63,8 @@ a:hover{color:#6BFF3B}
 [data-rv]{transition:opacity .8s cubic-bezier(.2,.7,.2,1) var(--rv-d,0ms),transform .8s cubic-bezier(.2,.7,.2,1) var(--rv-d,0ms)!important}
 h1,h2,h3,.pk-balance{text-wrap:balance!important}
 .pk-hero-grad-m{display:none}
+/* Foto de producto: contain (envase entero) + desvanecido arriba/abajo para que el borde de la foto se funda con el fondo de la card */
+.pk-card-img{-webkit-mask-image:linear-gradient(180deg,transparent 11%,#000 23%,#000 77%,transparent 89%);mask-image:linear-gradient(180deg,transparent 11%,#000 23%,#000 77%,transparent 89%)}
 .pk-hero h1 .pk-w{margin-right:.22em}
 @media (max-width:640px){
   /* Hero */
@@ -184,7 +186,7 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
                 <span class="pk-card-ph-logo" style="font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:14px;letter-spacing:-0.01em;color:#3a3a3a">PEAK.</span>
                 <span class="pk-card-ph-name" style="font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(22px,2.2vw,28px);line-height:1.05;letter-spacing:-0.01em;text-transform:uppercase;color:#3f3f3f;text-wrap:balance">{{ p.name }}</span>
               </div>
-              <img src="{{ p.image }}" alt="{{ p.alt }}" loading="lazy" onError="{{ imgError }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1);transform:{{ p.imgTransform }}">
+              <img class="pk-card-img" src="{{ p.image }}" alt="{{ p.alt }}" loading="lazy" decoding="async" onLoad="{{ imgLoad }}" onError="{{ imgError }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#0A0A0A;transition:transform .6s cubic-bezier(.2,.7,.2,1);transform:{{ p.imgTransform }}">
               <sc-if value="{{ p.noStock }}" hint-placeholder-val="{{ false }}">
                 <span class="pk-card-badge" style="position:absolute;top:16px;left:16px;padding:7px 12px;border-radius:999px;background:#0A0A0A;border:1px solid #262626;color:#F2F2EE;font-size:12px;font-weight:700;letter-spacing:0.04em">Sin stock</span>
               </sc-if>
@@ -419,12 +421,13 @@ const IG_URL = 'https://ig.me/m/peak_suplements';
 const SHOW_VENTAS = false; // "Ya están rindiendo": necesita uploads/ventas-01.jpg … ventas-06.jpg
 const SHOW_FAQ = false;    // "Preguntas": completá antes las respuestas [CONFIRMAR] de FAQS
 
+// image: ruta a la foto (uploads/*.webp, máx. 1000px). alt: descripción de la foto para lectores de pantalla.
 // hidden: true oculta la card sin borrarla. Para volver a mostrarla, sacá `hidden: true` (o ponelo en false).
 const PRODUCTS = [
-  { name: 'Creatina Star Nutrition', flavors: ['Sin sabor'], description: 'Creatina monohidrato micronizada', price: 25500, image: 'creatina-star.jpg', stock: true },
-  { name: 'Whey Protein ENA', flavors: ['Vainilla', 'Chocolate'], description: 'Proteína de alta calidad y cantidad por scoop', price: 96000, image: 'whey-ena.jpg', stock: true },
-  { name: 'ENA Whey X-Pro', flavors: ['Vainilla', 'Chocolate'], description: 'Proteína de alta calidad con contenido de creatina', price: 95000, image: 'whey-xpro.jpg', stock: true },
-  { name: 'Pancakes Proteicos Granger', flavors: ['Vainilla'], description: 'Premezcla para panqueques', price: 16000, image: 'pancakes-granger.jpg', stock: true },
+  { name: 'Creatina Star Nutrition', flavors: ['Sin sabor'], description: 'Creatina monohidrato micronizada', price: 25500, image: 'uploads/creatina-star.webp', alt: 'Bolsa de Creatina Star Nutrition monohidrato, sin sabor', stock: true },
+  { name: 'Whey Protein ENA', flavors: ['Vainilla', 'Chocolate'], description: 'Proteína de alta calidad y cantidad por scoop', price: 96000, image: 'uploads/whey-ena.webp', alt: 'Pote de Whey Protein ENA sabor vainilla y chocolate', stock: true },
+  { name: 'ENA Whey X-Pro', flavors: ['Vainilla', 'Chocolate'], description: 'Proteína de alta calidad con contenido de creatina', price: 95000, image: 'uploads/whey-xpro.webp', alt: 'Pote de ENA Whey X-Pro sabor vainilla y chocolate', stock: true },
+  { name: 'Pancakes Proteicos Granger', flavors: ['Vainilla'], description: 'Premezcla para panqueques', price: 16000, image: 'uploads/pancakes-granger.webp', alt: 'Bolsa de Pancakes Proteicos Granger sabor vainilla', stock: true },
   // Oculta porque no tiene foto. Para mostrarla: cargá la imagen en `image` y sacá `hidden: true`.
   { name: 'Whey Protein Star Nutrition', flavors: ['Vainilla', 'Chocolate'], description: 'Proteína de alta calidad y aislado de hidrolizado', price: 93000, image: '', stock: false, hidden: true },
 ];
@@ -564,7 +567,7 @@ class Component extends DCLogic {
     const products = PRODUCTS.filter(p => !p.hidden).map((p, i) => ({
       ...p,
       image: p.image || 'sin-foto.jpg',
-      alt: `${p.name} — ${p.flavors.join(' / ')}`,
+      alt: p.alt || `${p.name} — ${p.flavors.join(' / ')}`,
       priceLabel: fmtPrice(p.price),
       inStock: p.stock, noStock: !p.stock,
       delay: String(i * 90),
@@ -596,6 +599,8 @@ class Component extends DCLogic {
       marqueeRuns: [{ hidden: false }, { hidden: true }],
       products,
       imgError: e => { e.currentTarget.style.display = 'none'; },
+      // Con la foto cargada se oculta el placeholder ("PEAK." + nombre); si la foto falla, el placeholder queda visible.
+      imgLoad: e => { const ph = e.currentTarget.parentElement.querySelector('.pk-card-ph'); if (ph) ph.style.visibility = 'hidden'; },
       steps: [
         { n: '01', text: 'Elegí tu producto', sub: 'Mirá el catálogo con precios actualizados.', delay: '0' },
         { n: '02', text: 'Escribinos por WhatsApp o Instagram', sub: 'Te respondemos y confirmamos stock.', delay: '120' },
