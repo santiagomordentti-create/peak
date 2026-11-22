@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>PEAK. | Suplementos en Tandil y Bs As</title>
+<meta name="description" content="Suplementos deportivos en Tandil y Buenos Aires. Creatina, whey protein y más, por stock o por encargue. Pedí por WhatsApp.">
+<meta property="og:title" content="PEAK. | Suplementos en Tandil y Bs As">
+<meta property="og:description" content="Suplementos para el que entrena duro. Stock en Tandil y Bs As, y lo que no tengamos, lo traemos.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="uploads/hero-product.png">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="icon" type="image/svg+xml" href="peak-mark.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&amp;family=Archivo+Black&amp;family=Manrope:wght@400;600;700&amp;display=swap">
+<style>
+html{scroll-behavior:smooth;background:#0A0A0A}
+body{margin:0;background:#0A0A0A;color:#F2F2EE;font-family:Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#F2F2EE;text-decoration:none}
+a:hover{color:#6BFF3B}
+:focus-visible{outline:2px solid #6BFF3B;outline-offset:3px;border-radius:4px}
+::selection{background:#6BFF3B;color:#0A0A0A}
+@keyframes peakWord{from{opacity:0;transform:translateY(60%)}to{opacity:1;transform:none}}
+@keyframes peakFade{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes peakMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes peakBob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+@keyframes peakScroll{0%{transform:translateY(-100%)}100%{transform:translateY(200%)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</helmet>
+
+<header style="position:fixed;top:0;left:0;right:0;z-index:50;transition:background .3s ease, border-color .3s ease;background:{{ navBg }};backdrop-filter:{{ navBlur }};-webkit-backdrop-filter:{{ navBlur }};border-bottom:1px solid {{ navBorder }}">
+  <nav aria-label="Principal" style="max-width:1280px;margin:0 auto;padding:18px clamp(20px,5vw,48px);display:flex;align-items:center;justify-content:space-between;gap:24px">
+    <a href="#top" aria-label="PEAK. — volver al inicio" style="display:flex;align-items:center"><img src="logo-peak.svg" alt="PEAK." style="display:block;height:22px;width:auto"></a>
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;align-items:center;gap:36px">
+        <a href="#productos" style="font-size:14px;font-weight:600;letter-spacing:0.02em">Productos</a>
+        <a href="#como-pedir" style="font-size:14px;font-weight:600;letter-spacing:0.02em">Cómo pedir</a>
+        <a href="#encargues" style="font-size:14px;font-weight:600;letter-spacing:0.02em">Encargues</a>
+        <a href="{{ waGeneral }}" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;transition:transform .2s ease, box-shadow .2s ease" style-hover="color:#0A0A0A;transform:translateY(-1px);box-shadow:0 0 0 4px rgba(107,255,59,.18)">Pedir</a>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+      <button type="button" onClick="{{ openMenu }}" aria-label="Abrir menú" aria-expanded="{{ menuOpen }}" style="width:44px;height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:transparent;border:1px solid #262626;border-radius:12px;cursor:pointer;padding:0">
+        <span style="display:block;width:18px;height:2px;background:#F2F2EE"></span>
+        <span style="display:block;width:18px;height:2px;background:#F2F2EE"></span>
+      </button>
+    </sc-if>
+  </nav>
+</header>
+
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+  <div role="dialog" aria-modal="true" aria-label="Menú" style="position:fixed;inset:0;z-index:60;background:#0A0A0A;display:flex;flex-direction:column;padding:18px clamp(20px,5vw,48px) 40px;animation:peakFade .3s ease both">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <img src="logo-peak.svg" alt="PEAK." style="display:block;height:22px;width:auto">
+      <button type="button" onClick="{{ closeMenu }}" aria-label="Cerrar menú" style="width:44px;height:44px;background:transparent;border:1px solid #262626;border-radius:12px;color:#F2F2EE;font-size:22px;cursor:pointer;line-height:1">×</button>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px">
+      <a href="#productos" onClick="{{ closeMenu }}" style="font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(30px,9vw,56px);letter-spacing:-0.01em;line-height:1.05;text-transform:uppercase">Productos</a>
+      <a href="#como-pedir" onClick="{{ closeMenu }}" style="font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(30px,9vw,56px);letter-spacing:-0.01em;line-height:1.05;text-transform:uppercase">Cómo pedir</a>
+      <a href="#encargues" onClick="{{ closeMenu }}" style="font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(30px,9vw,56px);letter-spacing:-0.01em;line-height:1.05;text-transform:uppercase">Encargues</a>
+    </div>
+    <a href="{{ waGeneral }}" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:flex;justify-content:center;align-items:center;min-height:56px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:16px;border-radius:999px">Pedir por WhatsApp</a>
+  </div>
+</sc-if>
+
+<main id="top">
+  <section aria-label="Inicio" style="position:relative;height:100vh;height:100svh;min-height:600px;overflow:hidden;display:flex;align-items:center;background:#0A0A0A">
+    <sc-if value="{{ showVideo }}" hint-placeholder-val="{{ true }}">
+      <video ref="{{ videoRef }}" src="uploads/hero-loop.mp4" poster="{{ heroPoster }}" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="auto" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:75% center"></video>
+    </sc-if>
+    <sc-if value="{{ showPosterOnly }}" hint-placeholder-val="{{ false }}">
+      <img src="{{ heroPoster }}" alt="Pote de suplemento negro con luz de contorno verde sobre fondo oscuro" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:75% center">
+    </sc-if>
+    <div aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(90deg, rgba(10,10,10,.85) 0%, rgba(10,10,10,.55) 45%, rgba(10,10,10,0) 100%)"></div>
+    <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:30%;background:linear-gradient(0deg,#0A0A0A,rgba(10,10,10,0))"></div>
+    <div ref="{{ heroContentRef }}" style="position:relative;width:100%;max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,48px);will-change:transform,opacity">
+      <div style="max-width:640px;display:flex;flex-direction:column;gap:24px">
+        
+        
+        <h1 style="margin:0;font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(38px,8.4vw,112px);line-height:0.92;letter-spacing:-0.01em;text-transform:uppercase;display:flex;flex-wrap:wrap;column-gap:0.22em">
+          <span style="display:inline-block;overflow:hidden;padding-bottom:0.04em"><span style="display:inline-block;animation:peakWord .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:100ms">LLEGÁ</span></span>
+          <span style="display:inline-block;overflow:hidden;padding-bottom:0.04em"><span style="display:inline-block;animation:peakWord .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:180ms">A</span></span>
+          <span style="display:inline-block;overflow:hidden;padding-bottom:0.04em"><span style="display:inline-block;animation:peakWord .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:260ms">TU</span></span>
+          <span style="display:inline-block;overflow:hidden;padding-bottom:0.04em"><span style="display:inline-block;animation:peakWord .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:340ms">PICO<span style="color:#6BFF3B">.</span></span></span>
+        </h1>
+        <p style="margin:0;max-width:480px;font-size:clamp(16px,1.6vw,19px);line-height:1.6;color:#C9C9C4;text-wrap:pretty;animation:peakFade .7s ease both;animation-delay:550ms">Suplementos para el que entrena duro y busca resultados. Stock en Tandil y Bs As, y lo que no tengamos, lo traemos.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;animation:peakFade .7s ease both;animation-delay:700ms">
+          <a href="#productos" aria-label="Ver productos" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:15px;border-radius:999px;transition:transform .2s ease, box-shadow .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Ver productos</a>
+          <a href="{{ waGeneral }}" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;border:1.5px solid #F2F2EE;color:#F2F2EE;font-weight:700;font-size:15px;border-radius:999px;transition:border-color .2s ease, color .2s ease" style-hover="border-color:#6BFF3B;color:#6BFF3B">Pedir por WhatsApp</a>
+        </div>
+      </div>
+    </div>
+    <a href="#productos" aria-label="Bajar a productos" style="position:absolute;left:50%;bottom:28px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;color:#8C8C8C;font-size:11px;font-weight:700;letter-spacing:0.24em">
+      
+      
+    </a>
+  </section>
+
+  
+
+  <section id="productos" aria-labelledby="productos-title" style="max-width:1280px;margin:0 auto;padding:clamp(88px,12vw,160px) clamp(20px,5vw,48px)">
+    <div data-reveal="" style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 40px;margin-bottom:clamp(40px,6vw,72px)">
+      <h2 id="productos-title" style="margin:0;font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(28px,6vw,84px);line-height:0.95;letter-spacing:-0.01em">EL CATÁLOGO<span style="color:#6BFF3B">.</span></h2>
+      
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:20px">
+      <sc-for list="{{ products }}" as="p" hint-placeholder-count="5">
+        <div data-reveal="" data-delay="{{ p.delay }}">
+          <article onMouseEnter="{{ p.onEnter }}" onMouseLeave="{{ p.onLeave }}" style="height:100%;display:flex;flex-direction:column;background:#151515;border:1px solid #262626;border-radius:16px;overflow:hidden;transition:transform .35s cubic-bezier(.2,.7,.2,1), border-color .35s ease" style-hover="transform:translateY(-4px);border-color:rgba(107,255,59,.4)">
+            <div style="position:relative;aspect-ratio:4/5;background:#0A0A0A;overflow:hidden">
+              <div aria-hidden="true" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:28px;background:radial-gradient(120% 80% at 70% 100%, #161a14 0%, #0A0A0A 60%)">
+                <span style="font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:14px;letter-spacing:-0.01em;color:#3a3a3a">PEAK.</span>
+                <span style="font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(22px,2.2vw,28px);line-height:1.05;letter-spacing:-0.01em;text-transform:uppercase;color:#3f3f3f;text-wrap:balance">{{ p.name }}</span>
+              </div>
+              <img src="{{ p.image }}" alt="{{ p.alt }}" loading="lazy" onError="{{ imgError }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1);transform:{{ p.imgTransform }}">
+              <sc-if value="{{ p.noStock }}" hint-placeholder-val="{{ false }}">
+                <span style="position:absolute;top:16px;left:16px;padding:7px 12px;border-radius:999px;background:#0A0A0A;border:1px solid #262626;color:#F2F2EE;font-size:12px;font-weight:700;letter-spacing:0.04em">Sin stock</span>
+              </sc-if>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:14px;padding:24px">
+              <h3 style="margin:0;font-size:20px;font-weight:700;line-height:1.25;letter-spacing:-0.01em">{{ p.name }}</h3>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ p.flavors }}" as="f" hint-placeholder-count="2">
+                  <span style="padding:5px 11px;border:1px solid #262626;border-radius:999px;font-size:12px;font-weight:600;color:#C9C9C4">{{ f }}</span>
+                </sc-for>
+              </div>
+              <p style="margin:0;color:#8C8C8C;font-size:15px;line-height:1.55;text-wrap:pretty">{{ p.description }}</p>
+              <div style="margin-top:auto;padding-top:12px;display:flex;flex-direction:column;gap:14px">
+                <p style="margin:0;font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(28px,2.6vw,34px);letter-spacing:-0.01em;color:#6BFF3B;line-height:1">{{ p.priceLabel }}</p>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                  <sc-if value="{{ p.inStock }}" hint-placeholder-val="{{ true }}">
+                    <a href="{{ p.waHref }}" target="_blank" rel="noopener" aria-label="{{ p.ariaLabel }}" style="display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 26px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:15px;border-radius:999px;transition:box-shadow .2s ease" style-hover="color:#0A0A0A;box-shadow:0 0 0 5px rgba(107,255,59,.18)">Pedir</a>
+                  </sc-if>
+                  <sc-if value="{{ p.noStock }}" hint-placeholder-val="{{ false }}">
+                    <a href="{{ p.waHref }}" target="_blank" rel="noopener" aria-label="{{ p.ariaLabel }}" style="display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border:1.5px solid #6BFF3B;color:#6BFF3B;font-weight:700;font-size:15px;border-radius:999px;transition:background .2s ease, color .2s ease" style-hover="background:#6BFF3B;color:#0A0A0A">Consultar por encargue</a>
+                  </sc-if>
+                  
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </sc-for>
+    </div>
+    
+  </section>
+
+  <section id="encargues" ref="{{ encargueRef }}" aria-labelledby="encargues-title" style="position:relative;overflow:hidden;padding:clamp(120px,16vw,200px) 0">
+    <div ref="{{ parallaxRef }}" aria-hidden="true" style="position:absolute;left:0;right:0;top:-20%;bottom:-20%;background-image:url('uploads/encargue-bg.jpg');background-size:cover;background-position:center;will-change:transform"></div>
+    <div aria-hidden="true" style="position:absolute;inset:0;background:rgba(10,10,10,.75)"></div>
+    <svg aria-hidden="true" viewBox="0 0 96 100" preserveAspectRatio="xMaxYMax meet" style="position:absolute;right:-6%;bottom:-14%;height:135%;width:auto;opacity:0.04;pointer-events:none"><path fill="#F2F2EE" d="M0 100 L48 0 L96 100 H68 L48 52 L28 100 Z"></path></svg>
+    <div data-reveal="" style="position:relative;max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,48px);display:flex;flex-direction:column;align-items:flex-start;gap:28px">
+      <h2 id="encargues-title" style="margin:0;max-width:900px;font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(30px,6.4vw,92px);line-height:0.95;letter-spacing:-0.01em;text-wrap:balance">¿NO ESTÁ LO QUE BUSCÁS?</h2>
+      <p style="margin:0;max-width:520px;font-size:clamp(16px,1.6vw,19px);line-height:1.6;color:#D8D8D3;text-wrap:pretty">Trabajamos con gran variedad de marcas. Decinos qué necesitás y te lo conseguimos.</p>
+      <a href="{{ waEncargue }}" target="_blank" rel="noopener" aria-label="Hacer un encargue por WhatsApp" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:15px;border-radius:999px;transition:box-shadow .2s ease, transform .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Hacer un encargue</a>
+    </div>
+  </section>
+
+  <section id="como-pedir" ref="{{ stepsRef }}" aria-labelledby="pedir-title" style="max-width:1280px;margin:0 auto;padding:clamp(88px,12vw,160px) clamp(20px,5vw,48px) clamp(72px,9vw,120px)">
+    <h2 id="pedir-title" data-reveal="" style="margin:0 0 clamp(40px,6vw,72px);font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(28px,6vw,84px);line-height:0.95;letter-spacing:-0.01em">PEDIR ES SIMPLE<span style="color:#6BFF3B">.</span></h2>
+
+    <sc-if value="{{ isA }}" hint-placeholder-val="{{ true }}">
+      <div style="position:relative">
+        <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+          <div aria-hidden="true" style="position:absolute;top:27px;left:28px;right:calc((100% - 80px) / 3 - 28px);height:2px;background:#262626"></div>
+          <div ref="{{ lineRef }}" data-axis="x" aria-hidden="true" style="position:absolute;top:27px;left:28px;right:calc((100% - 80px) / 3 - 28px);height:2px;background:#6BFF3B;transform-origin:left center;transform:scaleX(0);box-shadow:0 0 10px rgba(107,255,59,.45)"></div>
+        </sc-if>
+        <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+          <div aria-hidden="true" style="position:absolute;left:27px;top:28px;bottom:0;width:2px;background:#262626"></div>
+          <div ref="{{ lineRef }}" data-axis="y" aria-hidden="true" style="position:absolute;left:27px;top:28px;bottom:0;width:2px;background:#6BFF3B;transform-origin:center top;transform:scaleY(0);box-shadow:0 0 10px rgba(107,255,59,.45)"></div>
+        </sc-if>
+        <ol style="position:relative;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:{{ stepsCols }};gap:{{ aGap }}">
+          <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+            <li data-reveal="" data-delay="{{ s.delay }}" style="display:flex;flex-direction:{{ aDir }};align-items:flex-start;gap:24px">
+              <span aria-hidden="true" style="position:relative;z-index:1;flex-shrink:0;width:56px;height:56px;border-radius:999px;border:1.5px solid #6BFF3B;background:#0A0A0A;display:flex;align-items:center;justify-content:center;font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:14px;letter-spacing:-0.01em;color:#6BFF3B;box-shadow:0 0 0 8px #0A0A0A">{{ s.n }}</span>
+              <div style="display:flex;flex-direction:column;gap:8px;padding-top:{{ aTextPad }}">
+                <h3 style="margin:0;max-width:320px;font-size:clamp(20px,1.9vw,23px);font-weight:700;line-height:1.3;letter-spacing:-0.01em;text-wrap:pretty"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Paso {{ s.n }}: </span>{{ s.text }}</h3>
+                <p style="margin:0;max-width:300px;color:#8C8C8C;font-size:15px;line-height:1.55">{{ s.sub }}</p>
+              </div>
+            </li>
+          </sc-for>
+        </ol>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isB }}" hint-placeholder-val="{{ false }}">
+      <ol style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:20px">
+        <li data-reveal="" onMouseEnter="{{ sEnter0 }}" onMouseLeave="{{ sLeave }}" style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:#151515;border:1px solid #262626;border-radius:16px;transition:border-color .3s ease, transform .3s ease" style-hover="border-color:rgba(107,255,59,.4);transform:translateY(-4px)">
+          <div style="position:relative;height:clamp(200px,17vw,240px);overflow:hidden">
+            <img src="uploads/paso-01.jpg" alt="Scoop negro lleno de proteína en polvo, con polvo esparcido sobre una superficie oscura y luz verde" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:left center;filter:brightness(0.7);transition:transform .7s cubic-bezier(.2,.7,.2,1);transform:{{ sImg0 }}">
+            <div aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(21,21,21,0) 0%, #151515 100%)"></div>
+          </div>
+          <span aria-hidden="true" style="position:absolute;z-index:2;top:-22px;right:-8px;font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:120px;line-height:1;letter-spacing:-0.01em;color:transparent;-webkit-text-stroke:1.5px rgba(107,255,59,.7)">01</span>
+          <span aria-hidden="true" style="position:absolute;z-index:2;top:20px;left:20px;width:52px;height:52px;border:1px solid #262626;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#0A0A0A">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6BFF3B" stroke-width="1.6" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"></path><circle cx="4.5" cy="6" r="1"></circle><circle cx="4.5" cy="12" r="1"></circle><circle cx="4.5" cy="18" r="1"></circle></svg>
+          </span>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px;padding:8px 32px 32px">
+            <h3 style="margin:0;font-size:22px;font-weight:700;line-height:1.3;letter-spacing:-0.01em"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Paso 01: </span>Elegí tu producto</h3>
+            <p style="margin:0;color:#8C8C8C;font-size:15px;line-height:1.55">Mirá el catálogo con precios actualizados.</p>
+          </div>
+        </li>
+        <li data-reveal="" data-delay="100" onMouseEnter="{{ sEnter1 }}" onMouseLeave="{{ sLeave }}" style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:#151515;border:1px solid #262626;border-radius:16px;transition:border-color .3s ease, transform .3s ease" style-hover="border-color:rgba(107,255,59,.4);transform:translateY(-4px)">
+          <div style="position:relative;height:clamp(200px,17vw,240px);overflow:hidden">
+            <img src="uploads/paso-02.jpg" alt="Mano sosteniendo un celular con un chat abierto en un gimnasio oscuro" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:left center;filter:brightness(0.7);transition:transform .7s cubic-bezier(.2,.7,.2,1);transform:{{ sImg1 }}">
+            <div aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(21,21,21,0) 0%, #151515 100%)"></div>
+          </div>
+          <span aria-hidden="true" style="position:absolute;z-index:2;top:-22px;right:-8px;font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:120px;line-height:1;letter-spacing:-0.01em;color:transparent;-webkit-text-stroke:1.5px rgba(107,255,59,.7)">02</span>
+          <span aria-hidden="true" style="position:absolute;z-index:2;top:20px;left:20px;width:52px;height:52px;border:1px solid #262626;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#0A0A0A">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6BFF3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12Z"></path><path d="M9 11h6M9 14h4"></path></svg>
+          </span>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px;padding:8px 32px 32px">
+            <h3 style="margin:0;font-size:22px;font-weight:700;line-height:1.3;letter-spacing:-0.01em"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Paso 02: </span>Escribinos por WhatsApp o Instagram</h3>
+            <p style="margin:0;color:#8C8C8C;font-size:15px;line-height:1.55">Te respondemos y confirmamos stock.</p>
+          </div>
+        </li>
+        <li data-reveal="" data-delay="200" onMouseEnter="{{ sEnter2 }}" onMouseLeave="{{ sLeave }}" style="position:relative;overflow:hidden;display:flex;flex-direction:column;background:#151515;border:1px solid #262626;border-radius:16px;transition:border-color .3s ease, transform .3s ease" style-hover="border-color:rgba(107,255,59,.4);transform:translateY(-4px)">
+          <div style="position:relative;height:clamp(200px,17vw,240px);overflow:hidden">
+            <img src="uploads/paso-03.jpg" alt="Una mano entrega un pote de suplemento negro a otra en una calle de noche" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:left center;filter:brightness(0.7);transition:transform .7s cubic-bezier(.2,.7,.2,1);transform:{{ sImg2 }}">
+            <div aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(21,21,21,0) 0%, #151515 100%)"></div>
+          </div>
+          <span aria-hidden="true" style="position:absolute;z-index:2;top:-22px;right:-8px;font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:120px;line-height:1;letter-spacing:-0.01em;color:transparent;-webkit-text-stroke:1.5px rgba(107,255,59,.7)">03</span>
+          <span aria-hidden="true" style="position:absolute;z-index:2;top:20px;left:20px;width:52px;height:52px;border:1px solid #262626;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#0A0A0A">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6BFF3B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5v-9Z"></path><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"></path></svg>
+          </span>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px;padding:8px 32px 32px">
+            <h3 style="margin:0;font-size:22px;font-weight:700;line-height:1.3;letter-spacing:-0.01em"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Paso 03: </span>Coordinamos entrega o retiro en Tandil o Bs As</h3>
+            <p style="margin:0;color:#8C8C8C;font-size:15px;line-height:1.55">Pagás y lo tenés en mano.</p>
+          </div>
+        </li>
+      </ol>
+    </sc-if>
+
+    <sc-if value="{{ isC }}" hint-placeholder-val="{{ false }}">
+      <div style="position:relative;border-bottom:1px solid #262626">
+        <div aria-hidden="true" style="position:absolute;left:0;top:0;bottom:0;width:2px;background:#262626"></div>
+        <div ref="{{ lineRef }}" data-axis="y" aria-hidden="true" style="position:absolute;left:0;top:0;bottom:0;width:2px;background:#6BFF3B;transform-origin:center top;transform:scaleY(0);box-shadow:0 0 10px rgba(107,255,59,.45)"></div>
+        <ol style="list-style:none;margin:0;padding:0">
+          <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+            <li data-reveal="" data-delay="{{ s.delay }}" style="display:grid;grid-template-columns:{{ cCols }};align-items:baseline;gap:8px 40px;padding:clamp(28px,4vw,44px) 0 clamp(28px,4vw,44px) clamp(24px,4vw,48px);border-top:1px solid #262626;transition:background .3s ease" style-hover="background:#151515">
+              <span aria-hidden="true" style="font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(40px,5vw,68px);line-height:1;letter-spacing:-0.01em;color:transparent;-webkit-text-stroke:1.5px #6BFF3B">{{ s.n }}</span>
+              <h3 style="margin:0;font-size:clamp(22px,2.6vw,32px);font-weight:700;line-height:1.2;letter-spacing:-0.015em;text-wrap:pretty"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Paso {{ s.n }}: </span>{{ s.text }}</h3>
+              <p style="margin:0;padding-right:24px;color:#8C8C8C;font-size:16px;line-height:1.55">{{ s.sub }}</p>
+            </li>
+          </sc-for>
+        </ol>
+      </div>
+    </sc-if>
+
+    <div data-reveal="" style="margin-top:clamp(48px,6vw,72px);display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px">
+      <a href="{{ waGeneral }}" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:inline-flex;align-items:center;min-height:56px;padding:0 32px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:16px;border-radius:999px;transition:box-shadow .2s ease, transform .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Pedir por WhatsApp</a>
+      
+    </div>
+  </section>
+
+  <section aria-labelledby="ventas-title" style="padding:clamp(40px,6vw,80px) 0 clamp(88px,12vw,160px);border-top:1px solid #262626">
+    <h2 id="ventas-title" data-reveal="" style="max-width:1280px;margin:clamp(48px,7vw,80px) auto clamp(40px,5vw,64px);padding:0 clamp(20px,5vw,48px);font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(28px,6vw,84px);line-height:0.95;letter-spacing:-0.01em">YA ESTÁN RINDIENDO<span style="color:#6BFF3B">.</span></h2>
+    <div ref="{{ sliderRef }}" role="region" aria-label="Fotos de entregas reales (arrastrá para ver más)" tabindex="0" onMouseEnter="{{ sliderPause }}" onMouseLeave="{{ sliderResume }}" onPointerDown="{{ dragStart }}" onPointerMove="{{ dragMove }}" onPointerUp="{{ dragEnd }}" onPointerCancel="{{ dragEnd }}" style="overflow-x:auto;overflow-y:hidden;scrollbar-width:none;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none">
+      <div style="display:flex;gap:16px;width:max-content;padding:0 clamp(20px,5vw,48px)">
+        <sc-for list="{{ ventas }}" as="v" hint-placeholder-count="6">
+          <figure aria-hidden="{{ v.dup }}" style="position:relative;margin:0;flex-shrink:0;width:clamp(220px,24vw,300px);aspect-ratio:3/4;border-radius:16px;overflow:hidden;background:#151515;border:1px solid #262626">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;color:#8C8C8C;font-size:12px;font-weight:700;letter-spacing:0.12em;border:1px dashed #333;border-radius:16px;margin:10px">[FOTO REAL DE ENTREGA]</div>
+            <img src="{{ v.src }}" alt="{{ v.alt }}" loading="lazy" draggable="false" onError="{{ imgError }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none">
+          </figure>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="faq-title" style="max-width:960px;margin:0 auto;padding:0 clamp(20px,5vw,48px) clamp(88px,12vw,160px)">
+    <h2 id="faq-title" data-reveal="" style="margin:0 0 clamp(32px,5vw,56px);font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(26px,4.4vw,56px);line-height:0.95;letter-spacing:-0.01em">PREGUNTAS<span style="color:#6BFF3B">.</span></h2>
+    <div data-reveal="" style="border-top:1px solid #262626">
+      <sc-for list="{{ faqs }}" as="q" hint-placeholder-count="4">
+        <div style="border-bottom:1px solid #262626">
+          <h3 style="margin:0">
+            <button type="button" id="{{ q.btnId }}" onClick="{{ q.toggle }}" aria-expanded="{{ q.open }}" aria-controls="{{ q.panelId }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px 0;background:transparent;border:0;color:#F2F2EE;font-family:Manrope,sans-serif;font-size:clamp(17px,1.8vw,20px);font-weight:700;text-align:left;cursor:pointer" style-hover="color:#6BFF3B">
+              <span>{{ q.q }}</span>
+              <span aria-hidden="true" style="flex-shrink:0;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:1px solid #262626;border-radius:999px;color:#6BFF3B;font-size:18px;transition:transform .3s ease;transform:{{ q.iconRot }}">+</span>
+            </button>
+          </h3>
+          <div id="{{ q.panelId }}" role="region" aria-labelledby="{{ q.btnId }}" style="display:grid;grid-template-rows:{{ q.rows }};transition:grid-template-rows .35s ease">
+            <div style="overflow:hidden">
+              <p style="margin:0;padding:0 56px 26px 0;color:#8C8C8C;font-size:16px;line-height:1.6">{{ q.a }}</p>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section aria-labelledby="cta-title" style="position:relative;overflow:hidden;padding:clamp(120px,16vw,220px) 0;text-align:center">
+    <img src="uploads/cta-bg.jpg" alt="" aria-hidden="true" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+    <div aria-hidden="true" style="position:absolute;inset:0;background:radial-gradient(ellipse at center, rgba(10,10,10,.82) 0%, rgba(10,10,10,.6) 100%)"></div>
+    <div style="position:relative;max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,48px);display:flex;flex-direction:column;align-items:center;gap:40px">
+      <h2 id="cta-title" data-reveal="scale" style="margin:0;font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(26px,7.4vw,116px);line-height:0.92;letter-spacing:-0.01em;text-wrap:balance">ENTRENÁS DURO.<br>SUPLEMENTATE BIEN<span style="color:#6BFF3B">.</span></h2>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px">
+        <a href="{{ waGeneral }}" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:inline-flex;align-items:center;min-height:56px;padding:0 32px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:16px;border-radius:999px;transition:box-shadow .2s ease, transform .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Pedir por WhatsApp</a>
+        <a href="{{ igUrl }}" target="_blank" rel="noopener" aria-label="Escribinos en Instagram" style="display:inline-flex;align-items:center;min-height:56px;padding:0 32px;border:1.5px solid #F2F2EE;color:#F2F2EE;font-weight:700;font-size:16px;border-radius:999px;transition:border-color .2s ease, color .2s ease" style-hover="border-color:#6BFF3B;color:#6BFF3B">Escribinos en Instagram</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer ref="{{ footerRef }}" style="background:#0A0A0A;border-top:1px solid #262626">
+  <div style="max-width:1280px;margin:0 auto;padding:48px clamp(20px,5vw,48px);display:flex;flex-direction:{{ fDir }};align-items:center;justify-content:space-between;gap:{{ fGap }};text-align:{{ fText }}">
+    <a href="#top" aria-label="PEAK. — volver al inicio" style="order:0;display:flex;align-items:center;min-height:44px"><img src="logo-peak.svg" alt="PEAK." loading="lazy" style="display:block;height:28px;width:auto"></a>
+    <div style="order:1;display:{{ fcDisplay }};flex-direction:column;align-items:center;gap:6px">
+      <p style="order:{{ fCopyOrder }};margin:0;color:#8C8C8C;font-size:15px;line-height:1.5">© 2026 PEAK. — Suplementos para el que entrena duro</p>
+      <p style="order:1;margin:0;display:inline-flex;align-items:center;gap:8px;color:#F2F2EE;font-size:15px;font-weight:600">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6BFF3B" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg>
+        Tandil / Bs As
+      </p>
+    </div>
+    <div style="order:2;display:flex;align-items:center;gap:28px">
+      <a href="https://ig.me/m/peak_suplements" target="_blank" rel="noopener" aria-label="Escribir a PEAK por Instagram" style="display:inline-flex;align-items:center;min-height:44px;color:#F2F2EE;font-size:15px;font-weight:600;background-image:linear-gradient(#6BFF3B,#6BFF3B);background-repeat:no-repeat;background-position:0 calc(100% - 10px);background-size:0% 1.5px;transition:background-size .35s cubic-bezier(.2,.7,.2,1), color .2s ease" style-hover="color:#6BFF3B;background-size:100% 1.5px">Instagram</a>
+      <a href="{{ waGeneral }}" target="_blank" rel="noopener" aria-label="Escribir a PEAK por WhatsApp" style="display:inline-flex;align-items:center;min-height:44px;color:#F2F2EE;font-size:15px;font-weight:600;background-image:linear-gradient(#6BFF3B,#6BFF3B);background-repeat:no-repeat;background-position:0 calc(100% - 10px);background-size:0% 1.5px;transition:background-size .35s cubic-bezier(.2,.7,.2,1), color .2s ease" style-hover="color:#6BFF3B;background-size:100% 1.5px">WhatsApp</a>
+    </div>
+  </div>
+  <p style="margin:0;padding:0 20px 14px;text-align:center;color:#8C8C8C;font-size:12px">Precios sujetos a cambio sin previo aviso.</p>
+  <div style="border-top:1px solid #262626;background:#0F0F0F;padding:20px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">
+    <span style="font-size:13px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#8C8C8C">Diseño y desarrollo</span>
+    <span style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600">
+      <span aria-hidden="true" style="color:#6BFF3B">—</span>
+      <a href="https://portfolio-weld-nine-48.vercel.app/" target="_blank" rel="noopener" aria-label="Portfolio de Santiago Mordentti" style="display:inline-flex;align-items:center;min-height:44px;color:#F2F2EE;text-decoration:underline;text-decoration-color:#F2F2EE;text-underline-offset:4px;transition:color .2s ease" style-hover="color:#6BFF3B;text-decoration-color:#6BFF3B">Santiago Mordentti</a>
+      <span aria-hidden="true" style="color:#6BFF3B">—</span>
+    </span>
+  </div>
+</footer>
+
+<a href="{{ waGeneral }}" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp" style="position:fixed;right:20px;bottom:20px;z-index:40;width:60px;height:60px;border-radius:999px;background:#6BFF3B;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.5);transition:opacity .3s ease, transform .3s ease;opacity:{{ fabOpacity }};transform:{{ fabTransform }};pointer-events:{{ fabPointer }}">
+  <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path fill="#0A0A0A" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2Zm0 18.15a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.24 8.24 0 1 1 6.98 3.86Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"></path></svg>
+</a>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;titulares&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Archivo ancho&quot;,&quot;Archivo Black&quot;],&quot;default&quot;:&quot;Archivo ancho&quot;,&quot;tsType&quot;:&quot;'Archivo ancho'|'Archivo Black'&quot;,&quot;section&quot;:&quot;Tipografía&quot;},&quot;pasosEstilo&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Timeline&quot;,&quot;Cards&quot;,&quot;Vertical&quot;],&quot;default&quot;:&quot;Cards&quot;,&quot;tsType&quot;:&quot;'Timeline'|'Cards'|'Vertical'&quot;,&quot;section&quot;:&quot;Cómo pedir&quot;},&quot;waNumber&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Contacto&quot;},&quot;showVideo&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hero&quot;}}">
+// ── Datos editables: actualizá precios y stock acá ──
+const WA_NUMBER = '[NUMERO_WHATSAPP]';
+const IG_URL = 'https://ig.me/m/peak_suplements';
+const PRODUCTS = [
+  { name: 'Creatina Star Nutrition', flavors: ['Sin sabor'], description: 'Creatina monohidrato micronizada', price: 25500, image: 'creatina-star.jpg', stock: true },
+  { name: 'Whey Protein ENA', flavors: ['Vainilla', 'Chocolate'], description: 'Proteína de alta calidad y cantidad por scoop', price: 96000, image: 'whey-ena.jpg', stock: true },
+  { name: 'ENA Whey X-Pro', flavors: ['Vainilla', 'Chocolate'], description: 'Proteína de alta calidad con contenido de creatina', price: 95000, image: 'whey-xpro.jpg', stock: true },
+  { name: 'Pancakes Proteicos Granger', flavors: ['Vainilla'], description: 'Premezcla para panqueques', price: 16000, image: 'pancakes-granger.jpg', stock: true },
+  { name: 'Whey Protein Star Nutrition', flavors: ['Vainilla', 'Chocolate'], description: 'Proteína de alta calidad y aislado de hidrolizado', price: 93000, image: '', stock: false },
+];
+const FAQS = [
+  { q: '¿Hacen envíos?', a: '[CONFIRMAR]' },
+  { q: '¿Cómo puedo pagar?', a: '[CONFIRMAR: efectivo / transferencia / Mercado Pago]' },
+  { q: '¿Cuánto tarda un encargue?', a: '[CONFIRMAR]' },
+  { q: '¿Los productos son originales?', a: '[CONFIRMAR]' },
+];
+const MARQUEE = ['CREATINA', 'WHEY PROTEIN', 'PROTEÍNA CON CREATINA', 'PANCAKES PROTEICOS', 'PEDIDOS POR ENCARGUE', 'TANDIL / BS AS'];
+const fmtPrice = n => '$' + n.toLocaleString('es-AR');
+
+class Component extends DCLogic {
+  state = {
+    scrolled: false, showFab: false, menuOpen: false, openFaq: -1, hover: -1,
+    isMobile: typeof window !== 'undefined' && window.innerWidth < 820,
+    reduced: typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  };
+  heroContentRef = React.createRef(); videoRef = React.createRef(); encargueRef = React.createRef();
+  parallaxRef = React.createRef(); stepsRef = React.createRef(); lineRef = React.createRef(); sliderRef = React.createRef(); footerRef = React.createRef();
+  sliderPaused = false; drag = null;
+
+  wa(msg) { const n = this.props.waNumber || WA_NUMBER; return `https://wa.me/${n}?text=${encodeURIComponent(msg)}`; }
+
+  componentDidMount() {
+    this.onScroll = () => this.handleScroll();
+    this.onResize = () => { const m = window.innerWidth < 820; if (m !== this.state.isMobile) this.setState({ isMobile: m }); this.handleScroll(); };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    window.addEventListener('resize', this.onResize);
+    const v = this.videoRef.current; if (v) { v.muted = true; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+    setTimeout(() => { this.setupReveal(); this.applyHeadlineFont(); }, 0);
+    this.handleScroll();
+    this.startSlider();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onScroll); window.removeEventListener('resize', this.onResize);
+    if (this.io) this.io.disconnect(); cancelAnimationFrame(this.raf);
+  }
+  componentDidUpdate() { this.handleScroll(); this.applyHeadlineFont(); }
+
+  applyHeadlineFont() {
+    const black = this.props.titulares === 'Archivo Black';
+    const fam = black ? "'Archivo Black', sans-serif" : 'Archivo, sans-serif';
+    document.querySelectorAll('[style*="Archivo"]').forEach(el => {
+      const s = el.style;
+      if (black ? s.fontFamily.includes('Black') : !s.fontFamily.includes('Black')) return;
+      s.fontFamily = fam;
+      s.fontVariationSettings = black ? 'normal' : "'wdth' 125";
+      s.fontWeight = black ? '400' : '800';
+      s.letterSpacing = black ? '-0.02em' : '-0.01em';
+    });
+  }
+
+  setupReveal() {
+    if (this.state.reduced || !('IntersectionObserver' in window)) return;
+    const els = document.querySelectorAll('[data-reveal]');
+    this.io = new IntersectionObserver(entries => entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.style.opacity = '1'; e.target.style.transform = 'none'; this.io.unobserve(e.target);
+    }), { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(el => {
+      const scale = el.getAttribute('data-reveal') === 'scale';
+      const d = parseInt(el.getAttribute('data-delay') || '0', 10);
+      el.style.opacity = '0';
+      el.style.transform = scale ? 'scale(.95)' : 'translateY(24px)';
+      el.style.transition = `opacity .8s cubic-bezier(.2,.7,.2,1) ${d}ms, transform ${scale ? '1.1s' : '.8s'} cubic-bezier(.2,.7,.2,1) ${d}ms`;
+      this.io.observe(el);
+    });
+  }
+
+  handleScroll() {
+    const y = window.scrollY, vh = window.innerHeight;
+    const ft = this.footerRef.current;
+    const footerIn = ft ? ft.getBoundingClientRect().top < vh - 24 : false;
+    const scrolled = y > 80, showFab = y > vh * 0.85 && !footerIn;
+    if (scrolled !== this.state.scrolled || showFab !== this.state.showFab) this.setState({ scrolled, showFab });
+    if (this.state.reduced) return;
+    const hc = this.heroContentRef.current;
+    if (hc) { const p = Math.min(Math.max(y / (vh * 0.7), 0), 1); hc.style.opacity = String(1 - p); hc.style.transform = `translateY(${-p * 60}px)`; }
+    const sec = this.encargueRef.current, bg = this.parallaxRef.current;
+    if (sec && bg) { const r = sec.getBoundingClientRect(); if (r.bottom > 0 && r.top < vh) bg.style.transform = `translate3d(0,${(r.top + r.height / 2 - vh / 2) * -0.15}px,0)`; }
+    const st = this.stepsRef.current, ln = this.lineRef.current;
+    if (st && ln) {
+      const r = st.getBoundingClientRect();
+      const p = Math.min(Math.max((vh * 0.85 - r.top) / (r.height * 0.75), 0), 1);
+      ln.style.transform = ln.getAttribute('data-axis') === 'y' ? `scaleY(${p})` : `scaleX(${p})`;
+    }
+  }
+
+  startSlider() {
+    const tick = () => {
+      const el = this.sliderRef.current;
+      if (el && !this.state.reduced && !this.sliderPaused && !this.drag) {
+        el.scrollLeft += 0.5;
+        const half = el.scrollWidth / 2;
+        if (el.scrollLeft >= half) el.scrollLeft -= half;
+      }
+      this.raf = requestAnimationFrame(tick);
+    };
+    this.raf = requestAnimationFrame(tick);
+  }
+
+  renderVals() {
+    const s = this.state;
+    const showVideoProp = this.props.showVideo ?? true;
+    const pasos = this.props.pasosEstilo ?? 'Timeline';
+    const products = PRODUCTS.map((p, i) => ({
+      ...p,
+      image: p.image || 'sin-foto.jpg',
+      alt: `${p.name} — ${p.flavors.join(' / ')}`,
+      priceLabel: fmtPrice(p.price),
+      inStock: p.stock, noStock: !p.stock,
+      delay: String(i * 90),
+      waHref: p.stock ? this.wa(`Hola Peak! Quiero ${p.name} (${fmtPrice(p.price)})`) : this.wa(`Hola Peak! Quiero encargar: ${p.name} (${fmtPrice(p.price)})`),
+      ariaLabel: p.stock ? `Pedir ${p.name} por WhatsApp` : `Consultar por encargue ${p.name} por WhatsApp`,
+      igLabel: `Consultar ${p.name} por Instagram`,
+      imgTransform: s.hover === i ? 'scale(1.04)' : 'scale(1)',
+      onEnter: () => this.setState({ hover: i }),
+      onLeave: () => this.setState({ hover: -1 }),
+    }));
+    const base = Array.from({ length: 6 }, (_, i) => `ventas-0${i + 1}.jpg`);
+    const ventas = [...base, ...base].map((src, i) => ({ src, dup: i >= 6, alt: `Entrega real de PEAK, foto ${(i % 6) + 1}` }));
+    return {
+      isMobile: s.isMobile, isDesktop: !s.isMobile, menuOpen: s.menuOpen,
+      openMenu: () => this.setState({ menuOpen: true }),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      navBg: s.scrolled || s.menuOpen ? 'rgba(10,10,10,.8)' : 'rgba(10,10,10,0)',
+      navBlur: s.scrolled ? 'blur(14px)' : 'none',
+      navBorder: s.scrolled ? '#262626' : 'transparent',
+      showVideo: !s.reduced && showVideoProp, showPosterOnly: s.reduced || !showVideoProp,
+      heroPoster: s.isMobile ? 'uploads/hero-mobile.png' : 'uploads/hero-product.png',
+      heroContentRef: this.heroContentRef, videoRef: this.videoRef, encargueRef: this.encargueRef,
+      parallaxRef: this.parallaxRef, stepsRef: this.stepsRef, lineRef: this.lineRef, sliderRef: this.sliderRef,
+      waGeneral: this.wa('Hola Peak! Quiero hacer una consulta'),
+      waEncargue: this.wa('Hola Peak! Quiero encargar: '),
+      igUrl: IG_URL,
+      marqueeItems: MARQUEE,
+      marqueeRuns: [{ hidden: false }, { hidden: true }],
+      products,
+      imgError: e => { e.currentTarget.style.display = 'none'; },
+      steps: [
+        { n: '01', text: 'Elegí tu producto', sub: 'Mirá el catálogo con precios actualizados.', delay: '0' },
+        { n: '02', text: 'Escribinos por WhatsApp o Instagram', sub: 'Te respondemos y confirmamos stock.', delay: '120' },
+        { n: '03', text: 'Coordinamos entrega o retiro en Tandil o Bs As', sub: 'Pagás y lo tenés en mano.', delay: '240' },
+      ],
+      sImg0: s.stepHover === 0 ? 'scale(1.05)' : 'scale(1)',
+      sImg1: s.stepHover === 1 ? 'scale(1.05)' : 'scale(1)',
+      sImg2: s.stepHover === 2 ? 'scale(1.05)' : 'scale(1)',
+      sEnter0: () => this.setState({ stepHover: 0 }),
+      sEnter1: () => this.setState({ stepHover: 1 }),
+      sEnter2: () => this.setState({ stepHover: 2 }),
+      sLeave: () => this.setState({ stepHover: -1 }),
+      isA: pasos === 'Timeline', isB: pasos === 'Cards', isC: pasos === 'Vertical',
+      stepsCols: s.isMobile ? '1fr' : 'repeat(3, minmax(0,1fr))',
+      aGap: s.isMobile ? '40px' : '40px',
+      aDir: s.isMobile ? 'row' : 'column',
+      aTextPad: s.isMobile ? '12px' : '0',
+      cCols: s.isMobile ? '1fr' : 'minmax(96px,140px) minmax(0,1.3fr) minmax(0,1fr)',
+      ventas,
+      sliderPause: () => { this.sliderPaused = true; },
+      sliderResume: () => { this.sliderPaused = false; this.drag = null; },
+      dragStart: e => { if (e.pointerType !== 'mouse') return; const el = this.sliderRef.current; this.drag = { x: e.clientX, left: el.scrollLeft }; el.setPointerCapture(e.pointerId); el.style.cursor = 'grabbing'; },
+      dragMove: e => { if (!this.drag) return; const el = this.sliderRef.current; el.scrollLeft = this.drag.left - (e.clientX - this.drag.x); },
+      dragEnd: () => { this.drag = null; const el = this.sliderRef.current; if (el) el.style.cursor = 'grab'; },
+      faqs: FAQS.map((f, i) => {
+        const open = s.openFaq === i;
+        return { ...f, open, btnId: `faq-btn-${i}`, panelId: `faq-panel-${i}`, rows: open ? '1fr' : '0fr', iconRot: open ? 'rotate(45deg)' : 'rotate(0deg)',
+          toggle: () => this.setState({ openFaq: open ? -1 : i }) };
+      }),
+      footerRef: this.footerRef,
+      fText: 'center',
+      fDir: s.isMobile ? 'column' : 'row',
+      fGap: s.isMobile ? '16px' : '32px',
+      fcDisplay: s.isMobile ? 'contents' : 'flex',
+      fCopyOrder: s.isMobile ? '3' : '0',
+      fabOpacity: s.showFab ? '1' : '0',
+      fabTransform: s.showFab ? 'translateY(0) scale(1)' : 'translateY(16px) scale(.9)',
+      fabPointer: s.showFab ? 'auto' : 'none',
+    };
+  }
+}
+</script>
+</body>
+</html>
