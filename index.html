@@ -23,7 +23,7 @@
 <link rel="icon" type="image/svg+xml" href="peak-mark.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&amp;family=Archivo+Black&amp;family=Manrope:wght@400;600;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&amp;family=Archivo+Black&amp;display=swap">
 <!-- Vercel Web Analytics (hay que activarlo en el dashboard de Vercel: Project → Analytics → Enable) -->
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
@@ -34,7 +34,18 @@
 <helmet>
 <style>
 html{scroll-behavior:smooth;background:#0A0A0A}
-body{margin:0;background:#0A0A0A;color:#F2F2EE;font-family:Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{margin:0;background:#0A0A0A;color:#F2F2EE;font-family:'Archivo',system-ui,sans-serif;font-variation-settings:'wdth' 112;font-weight:400;-webkit-font-smoothing:antialiased}
+button{font:inherit;font-variation-settings:inherit}
+/* Tipografía: todo es Archivo.
+   - Títulos: inline, 'wdth' 125 / 800.
+   - Bajadas (.pk-lead): 'wdth' 125 / 300, solo en tamaños >= 15px.
+   - Texto chico: hereda del body, 'wdth' 112 / 400.
+   - Botones y links del nav (.pk-btn / .pk-nav): 'wdth' 125 / 700, mayúsculas, 0.04em. */
+.pk-lead{font-variation-settings:'wdth' 125;font-weight:300;line-height:1.6!important;color:rgba(242,242,238,.8)!important;font-size:clamp(15px,1.1vw + 10px,18px)!important}
+.pk-btn,.pk-nav{font-variation-settings:'wdth' 125!important;font-weight:700!important;text-transform:uppercase;letter-spacing:.04em!important;white-space:nowrap}
+.pk-btn{font-size:13px!important;line-height:1.4;padding-left:20px!important;padding-right:20px!important}
+.pk-btn-lg{padding-left:26px!important;padding-right:26px!important}
+.pk-nav{font-size:13px!important}
 *{box-sizing:border-box}
 a{color:#F2F2EE;text-decoration:none}
 a:hover{color:#6BFF3B}
@@ -95,10 +106,10 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
     <a href="#top" aria-label="PEAK. — volver al inicio" style="display:flex;align-items:center"><img src="logo-peak.svg" alt="PEAK." style="display:block;height:22px;width:auto"></a>
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
       <div style="display:flex;align-items:center;gap:36px">
-        <a href="#productos" style="font-size:14px;font-weight:600;letter-spacing:0.02em">Productos</a>
-        <a href="#como-pedir" style="font-size:14px;font-weight:600;letter-spacing:0.02em">Cómo pedir</a>
-        <a href="#encargues" style="font-size:14px;font-weight:600;letter-spacing:0.02em">Encargues</a>
-        <a href="{{ waGeneral }}" data-wa="nav" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;transition:transform .2s ease, box-shadow .2s ease" style-hover="color:#0A0A0A;transform:translateY(-1px);box-shadow:0 0 0 4px rgba(107,255,59,.18)">Pedir</a>
+        <a class="pk-nav" href="#productos">Productos</a>
+        <a class="pk-nav" href="#como-pedir">Cómo pedir</a>
+        <a class="pk-nav" href="#encargues">Encargues</a>
+        <a class="pk-btn" href="{{ waGeneral }}" data-wa="nav" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;transition:transform .2s ease, box-shadow .2s ease" style-hover="color:#0A0A0A;transform:translateY(-1px);box-shadow:0 0 0 4px rgba(107,255,59,.18)">Pedir</a>
       </div>
     </sc-if>
     <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
@@ -121,7 +132,7 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
       <a href="#como-pedir" onClick="{{ closeMenu }}" style="font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(30px,9vw,56px);letter-spacing:-0.01em;line-height:1.05;text-transform:uppercase">Cómo pedir</a>
       <a href="#encargues" onClick="{{ closeMenu }}" style="font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(30px,9vw,56px);letter-spacing:-0.01em;line-height:1.05;text-transform:uppercase">Encargues</a>
     </div>
-    <a href="{{ waGeneral }}" data-wa="nav" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:flex;justify-content:center;align-items:center;min-height:56px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:16px;border-radius:999px">Pedir por WhatsApp</a>
+    <a class="pk-btn pk-btn-lg" href="{{ waGeneral }}" data-wa="nav" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:flex;justify-content:center;align-items:center;min-height:56px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:16px;border-radius:999px">Pedir por WhatsApp</a>
   </div>
 </sc-if>
 
@@ -143,10 +154,10 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
         <h1 style="margin:0;font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(38px,8.4vw,112px);line-height:0.92;letter-spacing:-0.01em;text-transform:uppercase;display:block;white-space:nowrap">
           <span class="pk-w" style="display:inline-block;overflow:hidden;padding-bottom:0.04em;vertical-align:top"><span style="display:inline-block;animation:peakWord .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:100ms">LLEGÁ</span></span><span style="display:inline-block;overflow:hidden;padding-bottom:0.04em;vertical-align:top"><span style="display:inline-block;animation:peakWord .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:180ms">A</span></span><br><span class="pk-w" style="display:inline-block;overflow:hidden;padding-bottom:0.04em;vertical-align:top"><span style="display:inline-block;animation:peakWord .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:260ms">TU</span></span><span style="display:inline-block;overflow:hidden;padding-bottom:0.04em;vertical-align:top"><span style="display:inline-block;animation:peakWord .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:340ms">PICO<span style="color:#6BFF3B">.</span></span></span>
         </h1>
-        <p style="margin:0;max-width:480px;font-size:clamp(16px,1.6vw,19px);line-height:1.6;color:#C9C9C4;text-wrap:pretty;animation:peakFade .7s ease both;animation-delay:550ms">Suplementos para el que entrena duro y busca resultados. Stock en Tandil y Bs As, y lo que no tengamos, lo traemos.</p>
+        <p class="pk-lead" style="margin:0;max-width:480px;text-wrap:pretty;animation:peakFade .7s ease both;animation-delay:550ms">Suplementos para el que entrena duro y busca resultados. Stock en Tandil y Bs As, y lo que no tengamos, lo traemos.</p>
         <div class="pk-hero-ctas" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;animation:peakFade .7s ease both;animation-delay:700ms">
-          <a href="#productos" aria-label="Ver productos" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:15px;border-radius:999px;transition:transform .2s ease, box-shadow .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Ver productos</a>
-          <a href="{{ waGeneral }}" data-wa="hero" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;border:1.5px solid #F2F2EE;color:#F2F2EE;font-weight:700;font-size:15px;border-radius:999px;transition:border-color .2s ease, color .2s ease" style-hover="border-color:#6BFF3B;color:#6BFF3B">Pedir por WhatsApp</a>
+          <a class="pk-btn" href="#productos" aria-label="Ver productos" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:15px;border-radius:999px;transition:transform .2s ease, box-shadow .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Ver productos</a>
+          <a class="pk-btn" href="{{ waGeneral }}" data-wa="hero" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;border:1.5px solid #F2F2EE;color:#F2F2EE;font-weight:700;font-size:15px;border-radius:999px;transition:border-color .2s ease, color .2s ease" style-hover="border-color:#6BFF3B;color:#6BFF3B">Pedir por WhatsApp</a>
         </div>
       </div>
     </div>
@@ -182,7 +193,7 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
               <h3 class="pk-card-title" style="margin:0;font-size:20px;font-weight:700;line-height:1.25;letter-spacing:-0.01em">{{ p.name }}</h3>
               <div class="pk-chips" style="display:flex;flex-wrap:wrap;gap:8px">
                 <sc-for list="{{ p.flavors }}" as="f" hint-placeholder-count="2">
-                  <span class="pk-chip" style="padding:5px 11px;border:1px solid #262626;border-radius:999px;font-size:12px;font-weight:600;color:#C9C9C4">{{ f }}</span>
+                  <span class="pk-chip" style="padding:5px 11px;border:1px solid #262626;border-radius:999px;font-size:12px;font-weight:400;color:#C9C9C4">{{ f }}</span>
                 </sc-for>
               </div>
               <p class="pk-card-desc" style="margin:0;color:#8C8C8C;font-size:15px;line-height:1.55;text-wrap:pretty">{{ p.description }}</p>
@@ -190,10 +201,10 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
                 <p class="pk-card-price" style="margin:0;font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(28px,2.6vw,34px);letter-spacing:-0.01em;color:#6BFF3B;line-height:1">{{ p.priceLabel }}</p>
                 <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
                   <sc-if value="{{ p.inStock }}" hint-placeholder-val="{{ true }}">
-                    <a class="pk-card-btn" href="{{ p.waHref }}" data-wa="producto" data-producto="{{ p.name }}" target="_blank" rel="noopener" aria-label="{{ p.ariaLabel }}" style="display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 26px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:15px;border-radius:999px;transition:box-shadow .2s ease" style-hover="color:#0A0A0A;box-shadow:0 0 0 5px rgba(107,255,59,.18)">Pedir</a>
+                    <a class="pk-btn pk-card-btn" href="{{ p.waHref }}" data-wa="producto" data-producto="{{ p.name }}" target="_blank" rel="noopener" aria-label="{{ p.ariaLabel }}" style="display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 26px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:15px;border-radius:999px;transition:box-shadow .2s ease" style-hover="color:#0A0A0A;box-shadow:0 0 0 5px rgba(107,255,59,.18)">Pedir</a>
                   </sc-if>
                   <sc-if value="{{ p.noStock }}" hint-placeholder-val="{{ false }}">
-                    <a class="pk-card-btn" href="{{ p.waHref }}" data-wa="producto" data-producto="{{ p.name }}" target="_blank" rel="noopener" aria-label="{{ p.ariaLabel }}" style="display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border:1.5px solid #6BFF3B;color:#6BFF3B;font-weight:700;font-size:15px;border-radius:999px;transition:background .2s ease, color .2s ease" style-hover="background:#6BFF3B;color:#0A0A0A">Consultar por encargue</a>
+                    <a class="pk-btn pk-card-btn" href="{{ p.waHref }}" data-wa="producto" data-producto="{{ p.name }}" target="_blank" rel="noopener" aria-label="{{ p.ariaLabel }}" style="display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border:1.5px solid #6BFF3B;color:#6BFF3B;font-weight:700;font-size:15px;border-radius:999px;transition:background .2s ease, color .2s ease" style-hover="background:#6BFF3B;color:#0A0A0A">Consultar por encargue</a>
                   </sc-if>
                   
                 </div>
@@ -212,8 +223,8 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
     <svg aria-hidden="true" viewBox="0 0 96 100" preserveAspectRatio="xMaxYMax meet" style="position:absolute;right:-6%;bottom:-14%;height:135%;width:auto;opacity:0.04;pointer-events:none"><path fill="#F2F2EE" d="M0 100 L48 0 L96 100 H68 L48 52 L28 100 Z"></path></svg>
     <div data-reveal="" style="position:relative;max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,48px);display:flex;flex-direction:column;align-items:flex-start;gap:28px">
       <h2 id="encargues-title" style="margin:0;max-width:900px;font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(30px,6.4vw,92px);line-height:0.95;letter-spacing:-0.01em;text-wrap:balance">¿NO ESTÁ LO QUE BUSCÁS?</h2>
-      <p style="margin:0;max-width:520px;font-size:clamp(16px,1.6vw,19px);line-height:1.6;color:#D8D8D3;text-wrap:pretty">Trabajamos con gran variedad de marcas. Decinos qué necesitás y te lo conseguimos.</p>
-      <a href="{{ waEncargue }}" data-wa="encargue" target="_blank" rel="noopener" aria-label="Hacer un encargue por WhatsApp" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:15px;border-radius:999px;transition:box-shadow .2s ease, transform .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Hacer un encargue</a>
+      <p class="pk-lead" style="margin:0;max-width:520px;text-wrap:pretty">Trabajamos con gran variedad de marcas. Decinos qué necesitás y te lo conseguimos.</p>
+      <a class="pk-btn" href="{{ waEncargue }}" data-wa="encargue" target="_blank" rel="noopener" aria-label="Hacer un encargue por WhatsApp" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:15px;border-radius:999px;transition:box-shadow .2s ease, transform .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Hacer un encargue</a>
     </div>
   </section>
 
@@ -308,7 +319,7 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
     </sc-if>
 
     <div data-reveal="" style="margin-top:clamp(48px,6vw,72px);display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px">
-      <a href="{{ waGeneral }}" data-wa="cta" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:inline-flex;align-items:center;min-height:56px;padding:0 32px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:16px;border-radius:999px;transition:box-shadow .2s ease, transform .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Pedir por WhatsApp</a>
+      <a class="pk-btn pk-btn-lg" href="{{ waGeneral }}" data-wa="cta" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:inline-flex;align-items:center;min-height:56px;padding:0 32px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:16px;border-radius:999px;transition:box-shadow .2s ease, transform .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Pedir por WhatsApp</a>
       
     </div>
   </section>
@@ -340,7 +351,7 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
       <sc-for list="{{ faqs }}" as="q" hint-placeholder-count="4">
         <div style="border-bottom:1px solid #262626">
           <h3 style="margin:0">
-            <button type="button" id="{{ q.btnId }}" onClick="{{ q.toggle }}" aria-expanded="{{ q.open }}" aria-controls="{{ q.panelId }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px 0;background:transparent;border:0;color:#F2F2EE;font-family:Manrope,sans-serif;font-size:clamp(17px,1.8vw,20px);font-weight:700;text-align:left;cursor:pointer" style-hover="color:#6BFF3B">
+            <button type="button" id="{{ q.btnId }}" onClick="{{ q.toggle }}" aria-expanded="{{ q.open }}" aria-controls="{{ q.panelId }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px 0;background:transparent;border:0;color:#F2F2EE;font-size:clamp(17px,1.8vw,20px);font-weight:700;text-align:left;cursor:pointer" style-hover="color:#6BFF3B">
               <span>{{ q.q }}</span>
               <span aria-hidden="true" style="flex-shrink:0;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:1px solid #262626;border-radius:999px;color:#6BFF3B;font-size:18px;transition:transform .3s ease;transform:{{ q.iconRot }}">+</span>
             </button>
@@ -362,8 +373,8 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
     <div style="position:relative;max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,48px);display:flex;flex-direction:column;align-items:center;gap:40px">
       <h2 id="cta-title" data-reveal="scale" style="margin:0;font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(26px,7.4vw,116px);line-height:0.92;letter-spacing:-0.01em;text-wrap:balance">ENTRENÁS DURO.<br>SUPLEMENTATE BIEN<span style="color:#6BFF3B">.</span></h2>
       <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px">
-        <a href="{{ waGeneral }}" data-wa="cta" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:inline-flex;align-items:center;min-height:56px;padding:0 32px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:16px;border-radius:999px;transition:box-shadow .2s ease, transform .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Pedir por WhatsApp</a>
-        <a href="{{ igUrl }}" target="_blank" rel="noopener" aria-label="Escribinos en Instagram" style="display:inline-flex;align-items:center;min-height:56px;padding:0 32px;border:1.5px solid #F2F2EE;color:#F2F2EE;font-weight:700;font-size:16px;border-radius:999px;transition:border-color .2s ease, color .2s ease" style-hover="border-color:#6BFF3B;color:#6BFF3B">Escribinos en Instagram</a>
+        <a class="pk-btn pk-btn-lg" href="{{ waGeneral }}" data-wa="cta" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:inline-flex;align-items:center;min-height:56px;padding:0 32px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:16px;border-radius:999px;transition:box-shadow .2s ease, transform .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Pedir por WhatsApp</a>
+        <a class="pk-btn pk-btn-lg" href="{{ igUrl }}" target="_blank" rel="noopener" aria-label="Escribinos en Instagram" style="display:inline-flex;align-items:center;min-height:56px;padding:0 32px;border:1.5px solid #F2F2EE;color:#F2F2EE;font-weight:700;font-size:16px;border-radius:999px;transition:border-color .2s ease, color .2s ease" style-hover="border-color:#6BFF3B;color:#6BFF3B">Escribinos en Instagram</a>
       </div>
     </div>
   </section>
@@ -374,20 +385,20 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
     <a href="#top" aria-label="PEAK. — volver al inicio" style="order:0;display:flex;align-items:center;min-height:44px"><img src="logo-peak.svg" alt="PEAK." loading="lazy" style="display:block;height:28px;width:auto"></a>
     <div style="order:1;display:{{ fcDisplay }};flex-direction:column;align-items:center;gap:6px">
       <p class="pk-balance" style="order:{{ fCopyOrder }};margin:0;color:#8C8C8C;font-size:15px;line-height:1.5">© 2026 PEAK. — Suplementos para el que entrena duro</p>
-      <p style="order:1;margin:0;display:inline-flex;align-items:center;gap:8px;color:#F2F2EE;font-size:15px;font-weight:600">
+      <p style="order:1;margin:0;display:inline-flex;align-items:center;gap:8px;color:#F2F2EE;font-size:15px;font-weight:400">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6BFF3B" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg>
         Tandil / Bs As
       </p>
     </div>
     <div style="order:2;display:flex;align-items:center;gap:28px">
-      <a href="https://ig.me/m/peak_suplements" target="_blank" rel="noopener" aria-label="Escribir a PEAK por Instagram" style="display:inline-flex;align-items:center;min-height:44px;color:#F2F2EE;font-size:15px;font-weight:600;background-image:linear-gradient(#6BFF3B,#6BFF3B);background-repeat:no-repeat;background-position:0 calc(100% - 10px);background-size:0% 1.5px;transition:background-size .35s cubic-bezier(.2,.7,.2,1), color .2s ease" style-hover="color:#6BFF3B;background-size:100% 1.5px">Instagram</a>
-      <a href="{{ waGeneral }}" data-wa="cta" target="_blank" rel="noopener" aria-label="Escribir a PEAK por WhatsApp" style="display:inline-flex;align-items:center;min-height:44px;color:#F2F2EE;font-size:15px;font-weight:600;background-image:linear-gradient(#6BFF3B,#6BFF3B);background-repeat:no-repeat;background-position:0 calc(100% - 10px);background-size:0% 1.5px;transition:background-size .35s cubic-bezier(.2,.7,.2,1), color .2s ease" style-hover="color:#6BFF3B;background-size:100% 1.5px">WhatsApp</a>
+      <a href="https://ig.me/m/peak_suplements" target="_blank" rel="noopener" aria-label="Escribir a PEAK por Instagram" style="display:inline-flex;align-items:center;min-height:44px;color:#F2F2EE;font-size:15px;font-weight:400;background-image:linear-gradient(#6BFF3B,#6BFF3B);background-repeat:no-repeat;background-position:0 calc(100% - 10px);background-size:0% 1.5px;transition:background-size .35s cubic-bezier(.2,.7,.2,1), color .2s ease" style-hover="color:#6BFF3B;background-size:100% 1.5px">Instagram</a>
+      <a href="{{ waGeneral }}" data-wa="cta" target="_blank" rel="noopener" aria-label="Escribir a PEAK por WhatsApp" style="display:inline-flex;align-items:center;min-height:44px;color:#F2F2EE;font-size:15px;font-weight:400;background-image:linear-gradient(#6BFF3B,#6BFF3B);background-repeat:no-repeat;background-position:0 calc(100% - 10px);background-size:0% 1.5px;transition:background-size .35s cubic-bezier(.2,.7,.2,1), color .2s ease" style-hover="color:#6BFF3B;background-size:100% 1.5px">WhatsApp</a>
     </div>
   </div>
   <p style="margin:0;padding:0 20px 14px;text-align:center;color:#8C8C8C;font-size:12px">Precios sujetos a cambio sin previo aviso.</p>
   <div style="border-top:1px solid #262626;background:#0F0F0F;padding:20px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">
-    <span style="font-size:13px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#8C8C8C">Diseño y desarrollo</span>
-    <span style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600">
+    <span style="font-size:13px;font-weight:400;letter-spacing:0.2em;text-transform:uppercase;color:#8C8C8C">Diseño y desarrollo</span>
+    <span style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:400">
       <span aria-hidden="true" style="color:#6BFF3B">—</span>
       <a href="https://portfolio-weld-nine-48.vercel.app/" target="_blank" rel="noopener" aria-label="Portfolio de Santiago Mordentti" style="display:inline-flex;align-items:center;min-height:44px;color:#F2F2EE;text-decoration:underline;text-decoration-color:#F2F2EE;text-underline-offset:4px;transition:color .2s ease" style-hover="color:#6BFF3B;text-decoration-color:#6BFF3B">Santiago Mordentti</a>
       <span aria-hidden="true" style="color:#6BFF3B">—</span>
