@@ -34,7 +34,7 @@ caba:   { nombre: 'CABA / Bs As', numero: '5492494574546', sub: 'Entrega o retir
 ```
 
 - La primera vez que alguien toca un botón de WhatsApp se abre el selector "¿Desde dónde pedís?". Al elegir, se abre WhatsApp con el número de esa ciudad y el mensaje de ese botón.
-- La ciudad queda guardada en el navegador (`localStorage`, clave `peak_ciudad`). Las siguientes veces va directo. Se cambia desde "📍 Ciudad · cambiar" en el nav o en el menú mobile.
+- La ciudad queda guardada en el navegador (`localStorage`, clave `peak_ciudad`). Las siguientes veces va directo. Se cambia desde la línea "Pedís desde … · cambiar" del footer (solo aparece si ya hay una ciudad guardada).
 - "Entrega o retiro en: ___ 📍" se completa solo con la ciudad elegida.
 - Los links "WhatsApp Tandil" y "WhatsApp CABA" del footer van directo a cada número, sin selector.
 

@@ -58,11 +58,11 @@
   .pk-city__handle{display:block}
 }
 @media (prefers-reduced-motion:reduce){.pk-city__overlay,.pk-city__dialog{animation:none}}
-/* Indicador de ciudad (nav y menú mobile) */
-.pk-ciudad{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;background:transparent;border:1px solid #262626;border-radius:999px;color:#C9C9C4;font:inherit;font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer;transition:border-color .2s ease,color .2s ease}
-.pk-ciudad:hover{border-color:#6BFF3B;color:#F2F2EE}
-.pk-ciudad__dot{color:#8C8C8C}
-.pk-ciudad__cambiar{color:#6BFF3B;text-decoration:underline;text-underline-offset:3px}
+/* Línea "Pedís desde … · cambiar" del footer (solo si hay ciudad guardada) */
+.pk-foot-ciudad{margin:0;color:#8C8C8C;font-size:13px;line-height:1.5}
+.pk-foot-ciudad button{padding:4px 2px;background:transparent;border:0;color:#8C8C8C;font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.pk-foot-ciudad button:hover{color:#F2F2EE}
+@media (max-width:819px){.pk-foot-ciudad{margin-top:-10px}}
 </style>
 <!-- Selector de ciudad + única función de WhatsApp. Los números están en CONTACTOS, dentro de ciudad.js -->
 <script src="./ciudad.js"></script>
@@ -145,16 +145,15 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
 <header style="position:fixed;top:0;left:0;right:0;z-index:50;transition:background .3s ease, border-color .3s ease;background:{{ navBg }};backdrop-filter:{{ navBlur }};-webkit-backdrop-filter:{{ navBlur }};border-bottom:1px solid {{ navBorder }}">
   <nav aria-label="Principal" style="max-width:1280px;margin:0 auto;padding:18px clamp(20px,5vw,48px);display:flex;align-items:center;justify-content:space-between;gap:24px">
     <a href="#top" aria-label="PEAK. — volver al inicio" style="display:flex;align-items:center"><img src="logo-peak.svg" alt="PEAK." style="display:block;height:22px;width:auto"></a>
-    <sc-if value="{{ navFull }}" hint-placeholder-val="{{ true }}">
+    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
       <div style="display:flex;align-items:center;gap:36px">
         <a class="pk-nav" href="#productos">Productos</a>
         <a class="pk-nav" href="#como-pedir">Cómo pedir</a>
         <a class="pk-nav" href="#encargues">Encargues</a>
-        <button type="button" class="pk-ciudad" data-ciudad-abrir="" aria-label="{{ ciudadAria }}"><span>📍 {{ ciudadTexto }}</span><sc-if value="{{ hasCiudad }}" hint-placeholder-val="{{ false }}"><span class="pk-ciudad__dot" aria-hidden="true">·</span><span class="pk-ciudad__cambiar">cambiar</span></sc-if></button>
         <a class="pk-btn" href="{{ waGeneral }}" data-msg="{{ msgGeneral }}" data-wa="nav" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;transition:transform .2s ease, box-shadow .2s ease" style-hover="color:#0A0A0A;transform:translateY(-1px);box-shadow:0 0 0 4px rgba(107,255,59,.18)">Pedir</a>
       </div>
     </sc-if>
-    <sc-if value="{{ navCompact }}" hint-placeholder-val="{{ false }}">
+    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
       <button type="button" onClick="{{ openMenu }}" aria-label="Abrir menú" aria-expanded="{{ menuOpen }}" style="width:44px;height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:transparent;border:1px solid #262626;border-radius:12px;cursor:pointer;padding:0">
         <span style="display:block;width:18px;height:2px;background:#F2F2EE"></span>
         <span style="display:block;width:18px;height:2px;background:#F2F2EE"></span>
@@ -174,7 +173,6 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
       <a href="#como-pedir" onClick="{{ closeMenu }}" style="font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(30px,9vw,56px);letter-spacing:-0.01em;line-height:1.05;text-transform:uppercase">Cómo pedir</a>
       <a href="#encargues" onClick="{{ closeMenu }}" style="font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(30px,9vw,56px);letter-spacing:-0.01em;line-height:1.05;text-transform:uppercase">Encargues</a>
     </div>
-    <div style="display:flex;justify-content:center;margin-bottom:16px"><button type="button" class="pk-ciudad" data-ciudad-abrir="" aria-label="{{ ciudadAria }}"><span>📍 {{ ciudadTexto }}</span><sc-if value="{{ hasCiudad }}" hint-placeholder-val="{{ false }}"><span class="pk-ciudad__dot" aria-hidden="true">·</span><span class="pk-ciudad__cambiar">cambiar</span></sc-if></button></div>
     <a class="pk-btn pk-btn-lg" href="{{ waGeneral }}" data-msg="{{ msgGeneral }}" data-wa="nav" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:flex;justify-content:center;align-items:center;min-height:56px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:16px;border-radius:999px">Pedir por WhatsApp</a>
   </div>
 </sc-if>
@@ -432,6 +430,10 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6BFF3B" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg>
         Tandil / Bs As
       </p>
+      <!-- Cambio de ciudad: solo aparece si ya hay una ciudad guardada (abre el selector sin mandar mensaje) -->
+      <sc-if value="{{ hasCiudad }}" hint-placeholder-val="{{ false }}">
+        <p class="pk-foot-ciudad" style="order:1">Pedís desde {{ ciudadTexto }} · <button type="button" data-ciudad-abrir="" aria-label="Cambiar ciudad (ahora: {{ ciudadTexto }})">cambiar</button></p>
+      </sc-if>
     </div>
     <div style="order:2;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 28px">
       <a href="https://ig.me/m/peak_suplements" target="_blank" rel="noopener" aria-label="Escribir a PEAK por Instagram" style="display:inline-flex;align-items:center;min-height:44px;color:#F2F2EE;font-size:15px;font-weight:400;background-image:linear-gradient(#6BFF3B,#6BFF3B);background-repeat:no-repeat;background-position:0 calc(100% - 10px);background-size:0% 1.5px;transition:background-size .35s cubic-bezier(.2,.7,.2,1), color .2s ease" style-hover="color:#6BFF3B;background-size:100% 1.5px">Instagram</a>
@@ -499,8 +501,6 @@ class Component extends DCLogic {
   state = {
     scrolled: false, showFab: false, menuOpen: false, openFaq: -1, hover: -1,
     isMobile: typeof window !== 'undefined' && window.innerWidth < 820,
-    // El nav completo (links + indicador de ciudad + Pedir) necesita ~1100px; por debajo se usa la hamburguesa.
-    navCompact: typeof window !== 'undefined' && window.innerWidth < 1100,
     reduced: typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   };
   heroContentRef = React.createRef(); videoRef = React.createRef(); encargueRef = React.createRef();
@@ -512,11 +512,7 @@ class Component extends DCLogic {
 
   componentDidMount() {
     this.onScroll = () => this.handleScroll();
-    this.onResize = () => {
-      const m = window.innerWidth < 820, nc = window.innerWidth < 1100;
-      if (m !== this.state.isMobile || nc !== this.state.navCompact) this.setState({ isMobile: m, navCompact: nc });
-      this.handleScroll();
-    };
+    this.onResize = () => { const m = window.innerWidth < 820; if (m !== this.state.isMobile) this.setState({ isMobile: m }); this.handleScroll(); };
     // Clicks de WhatsApp, selector y analytics: los maneja ciudad.js. Acá solo re-renderizamos al cambiar de ciudad.
     this.offCiudad = window.PeakCiudad ? window.PeakCiudad.onChange(c => this.setState({ ciudad: c })) : null;
     window.addEventListener('scroll', this.onScroll, { passive: true });
@@ -629,7 +625,6 @@ class Component extends DCLogic {
     const ventas = [...base, ...base].map((src, i) => ({ src, dup: i >= 6, alt: `Entrega real de PEAK, foto ${(i % 6) + 1}` }));
     return {
       isMobile: s.isMobile, isDesktop: !s.isMobile, menuOpen: s.menuOpen,
-      navCompact: s.navCompact, navFull: !s.navCompact,
       openMenu: () => this.setState({ menuOpen: true }),
       closeMenu: () => this.setState({ menuOpen: false }),
       navBg: s.scrolled || s.menuOpen ? 'rgba(10,10,10,.8)' : 'rgba(10,10,10,0)',
@@ -646,7 +641,6 @@ class Component extends DCLogic {
       waCaba: window.PeakCiudad ? window.PeakCiudad.waDirecto('caba', MSG_GENERAL) : '#',
       hasCiudad: !!ciudadNombre,
       ciudadTexto: ciudadNombre || 'Elegí tu ciudad',
-      ciudadAria: ciudadNombre ? `Ciudad: ${ciudadNombre}. Cambiar ciudad` : 'Elegí tu ciudad',
       showVentas: SHOW_VENTAS, showFaq: SHOW_FAQ,
       igUrl: IG_URL,
       marqueeItems: MARQUEE,

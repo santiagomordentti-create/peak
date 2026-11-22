@@ -8,7 +8,7 @@
  * se abre WhatsApp con el número de esa ciudad y el mensaje de ESE botón.
  *
  * Links directos sin selector (footer): data-wa-directo="tandil" | "caba".
- * Botones que solo abren el selector (indicador "📍 Tandil · cambiar"): data-ciudad-abrir.
+ * Botones que solo abren el selector, sin mandar mensaje (el "cambiar" del footer): data-ciudad-abrir.
  */
 (function () {
   'use strict';
