@@ -20,14 +20,27 @@ En `index.html`, buscá el comentario `// ── Datos editables: actualizá pre
 
 En el mismo bloque están:
 
-- `WA_NUMBER`: el único lugar con el número de WhatsApp (formato `549...`, sin `+`).
 - `MSG_GENERAL`, `MSG_ENCARGUE`, `msgProducto`, `msgSinStock`: los textos que se precargan en WhatsApp.
 - `SHOW_VENTAS` / `SHOW_FAQ`: muestran u ocultan "Ya están rindiendo" y "Preguntas" (`true` / `false`).
 - `FAQS` y `MARQUEE`.
 
+## WhatsApp por ciudad
+
+Los números están en un solo objeto, `CONTACTOS`, al principio de [`ciudad.js`](ciudad.js) (formato `549...`, sin `+`):
+
+```js
+tandil: { nombre: 'Tandil', numero: '5491126320965', sub: 'Entrega o retiro en Tandil' },
+caba:   { nombre: 'CABA / Bs As', numero: '5492494574546', sub: 'Entrega o retiro en Capital y alrededores' },
+```
+
+- La primera vez que alguien toca un botón de WhatsApp se abre el selector "¿Desde dónde pedís?". Al elegir, se abre WhatsApp con el número de esa ciudad y el mensaje de ese botón.
+- La ciudad queda guardada en el navegador (`localStorage`, clave `peak_ciudad`). Las siguientes veces va directo. Se cambia desde "📍 Ciudad · cambiar" en el nav o en el menú mobile.
+- "Entrega o retiro en: ___ 📍" se completa solo con la ciudad elegida.
+- Los links "WhatsApp Tandil" y "WhatsApp CABA" del footer van directo a cada número, sin selector.
+
 ## Analytics
 
-Usa Vercel Web Analytics. Hay que activarlo en Vercel (Project → Analytics → Enable). Cada click a WhatsApp manda el evento `click_whatsapp` con `origen` (`producto`, `hero`, `nav`, `flotante`, `encargue`, `cta`) y `producto`. Los eventos personalizados requieren el plan Pro de Vercel.
+Usa Vercel Web Analytics. Hay que activarlo en Vercel (Project → Analytics → Enable). Eventos: `elegir_ciudad` con `ciudad`, y `click_whatsapp` con `ciudad`, `origen` (`producto`, `hero`, `nav`, `flotante`, `encargue`, `cta`, `footer`) y `producto`. Los eventos personalizados requieren el plan Pro de Vercel.
 
 Después:
 

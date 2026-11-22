@@ -2,3 +2,6 @@
 node_modules/
 .vercel
 .thumbnail
+# Exports de Claude Design usados solo como referencia (no van al sitio)
+Selector_Ciudad_PEAK.html
+Selector Ciudad PEAK.html

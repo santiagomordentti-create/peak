@@ -27,6 +27,45 @@
 <!-- Vercel Web Analytics (hay que activarlo en el dashboard de Vercel: Project → Analytics → Enable) -->
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
+<style>
+/* ── Selector de ciudad (lo arma ciudad.js). Valores copiados del export de Claude Design, tipografía Archivo. ── */
+@keyframes peakOverlay{from{opacity:0}to{opacity:1}}
+@keyframes peakModal{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+@keyframes peakSheet{from{transform:translateY(100%)}to{transform:none}}
+.pk-city{position:fixed;inset:0;z-index:80;display:flex;justify-content:center;align-items:center;padding:20px;font-family:'Archivo',system-ui,sans-serif;font-variation-settings:'wdth' 112;color:#F2F2EE}
+.pk-city[hidden]{display:none}
+.pk-city__overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);animation:peakOverlay .25s ease both}
+.pk-city__dialog{position:relative;width:min(440px,100%);max-height:calc(100% - 20px);overflow-y:auto;background:#151515;border:1px solid #262626;border-radius:20px;padding:32px 28px 20px;display:flex;flex-direction:column;gap:24px;animation:peakModal .26s cubic-bezier(.2,.7,.2,1) both}
+.pk-city__handle{display:none;width:40px;height:4px;border-radius:999px;background:#3A3A3A;margin:-6px auto 0}
+.pk-city__head{display:flex;flex-direction:column;gap:8px}
+.pk-city__title{margin:0;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:26px;line-height:1;letter-spacing:-0.01em}
+.pk-city__desc{margin:0;color:#8C8C8C;font-size:15px;line-height:1.5}
+.pk-city__list{display:flex;flex-direction:column;gap:12px}
+.pk-city__opt{width:100%;display:flex;align-items:center;gap:16px;min-height:84px;padding:18px 20px;background:#0A0A0A;border:1.5px solid #262626;border-radius:14px;color:#F2F2EE;font:inherit;text-align:left;cursor:pointer;transition:border-color .2s ease}
+.pk-city__opt.is-actual{border-color:rgba(107,255,59,.45)}
+.pk-city__opt:hover,.pk-city__opt:focus-visible{border-color:#6BFF3B;outline:none}
+.pk-city__pin{flex-shrink:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:1px solid #262626;border-radius:12px;background:#151515}
+.pk-city__txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.pk-city__name{font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:22px;line-height:1.05;letter-spacing:-0.01em}
+.pk-city__sub{color:#8C8C8C;font-size:14px;line-height:1.4}
+.pk-city__actual{display:none;flex-shrink:0;color:#6BFF3B;font-size:12px;font-weight:700;letter-spacing:.04em}
+.pk-city__opt.is-actual .pk-city__actual{display:inline}
+.pk-city__cancel{align-self:center;min-height:44px;padding:0 16px;background:transparent;border:0;color:#8C8C8C;font:inherit;font-size:14px;font-weight:600;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+.pk-city__cancel:hover{color:#F2F2EE}
+@media (max-width:819px){
+  .pk-city{align-items:flex-end;padding:0}
+  .pk-city__dialog{width:100%;border-radius:20px 20px 0 0;border-bottom-width:0;padding:18px 20px calc(16px + env(safe-area-inset-bottom));animation:peakSheet .38s cubic-bezier(.2,.7,.2,1) both}
+  .pk-city__handle{display:block}
+}
+@media (prefers-reduced-motion:reduce){.pk-city__overlay,.pk-city__dialog{animation:none}}
+/* Indicador de ciudad (nav y menú mobile) */
+.pk-ciudad{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;background:transparent;border:1px solid #262626;border-radius:999px;color:#C9C9C4;font:inherit;font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer;transition:border-color .2s ease,color .2s ease}
+.pk-ciudad:hover{border-color:#6BFF3B;color:#F2F2EE}
+.pk-ciudad__dot{color:#8C8C8C}
+.pk-ciudad__cambiar{color:#6BFF3B;text-decoration:underline;text-underline-offset:3px}
+</style>
+<!-- Selector de ciudad + única función de WhatsApp. Los números están en CONTACTOS, dentro de ciudad.js -->
+<script src="./ciudad.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -106,15 +145,16 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
 <header style="position:fixed;top:0;left:0;right:0;z-index:50;transition:background .3s ease, border-color .3s ease;background:{{ navBg }};backdrop-filter:{{ navBlur }};-webkit-backdrop-filter:{{ navBlur }};border-bottom:1px solid {{ navBorder }}">
   <nav aria-label="Principal" style="max-width:1280px;margin:0 auto;padding:18px clamp(20px,5vw,48px);display:flex;align-items:center;justify-content:space-between;gap:24px">
     <a href="#top" aria-label="PEAK. — volver al inicio" style="display:flex;align-items:center"><img src="logo-peak.svg" alt="PEAK." style="display:block;height:22px;width:auto"></a>
-    <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+    <sc-if value="{{ navFull }}" hint-placeholder-val="{{ true }}">
       <div style="display:flex;align-items:center;gap:36px">
         <a class="pk-nav" href="#productos">Productos</a>
         <a class="pk-nav" href="#como-pedir">Cómo pedir</a>
         <a class="pk-nav" href="#encargues">Encargues</a>
-        <a class="pk-btn" href="{{ waGeneral }}" data-wa="nav" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;transition:transform .2s ease, box-shadow .2s ease" style-hover="color:#0A0A0A;transform:translateY(-1px);box-shadow:0 0 0 4px rgba(107,255,59,.18)">Pedir</a>
+        <button type="button" class="pk-ciudad" data-ciudad-abrir="" aria-label="{{ ciudadAria }}"><span>📍 {{ ciudadTexto }}</span><sc-if value="{{ hasCiudad }}" hint-placeholder-val="{{ false }}"><span class="pk-ciudad__dot" aria-hidden="true">·</span><span class="pk-ciudad__cambiar">cambiar</span></sc-if></button>
+        <a class="pk-btn" href="{{ waGeneral }}" data-msg="{{ msgGeneral }}" data-wa="nav" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px;transition:transform .2s ease, box-shadow .2s ease" style-hover="color:#0A0A0A;transform:translateY(-1px);box-shadow:0 0 0 4px rgba(107,255,59,.18)">Pedir</a>
       </div>
     </sc-if>
-    <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+    <sc-if value="{{ navCompact }}" hint-placeholder-val="{{ false }}">
       <button type="button" onClick="{{ openMenu }}" aria-label="Abrir menú" aria-expanded="{{ menuOpen }}" style="width:44px;height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:transparent;border:1px solid #262626;border-radius:12px;cursor:pointer;padding:0">
         <span style="display:block;width:18px;height:2px;background:#F2F2EE"></span>
         <span style="display:block;width:18px;height:2px;background:#F2F2EE"></span>
@@ -134,7 +174,8 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
       <a href="#como-pedir" onClick="{{ closeMenu }}" style="font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(30px,9vw,56px);letter-spacing:-0.01em;line-height:1.05;text-transform:uppercase">Cómo pedir</a>
       <a href="#encargues" onClick="{{ closeMenu }}" style="font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(30px,9vw,56px);letter-spacing:-0.01em;line-height:1.05;text-transform:uppercase">Encargues</a>
     </div>
-    <a class="pk-btn pk-btn-lg" href="{{ waGeneral }}" data-wa="nav" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:flex;justify-content:center;align-items:center;min-height:56px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:16px;border-radius:999px">Pedir por WhatsApp</a>
+    <div style="display:flex;justify-content:center;margin-bottom:16px"><button type="button" class="pk-ciudad" data-ciudad-abrir="" aria-label="{{ ciudadAria }}"><span>📍 {{ ciudadTexto }}</span><sc-if value="{{ hasCiudad }}" hint-placeholder-val="{{ false }}"><span class="pk-ciudad__dot" aria-hidden="true">·</span><span class="pk-ciudad__cambiar">cambiar</span></sc-if></button></div>
+    <a class="pk-btn pk-btn-lg" href="{{ waGeneral }}" data-msg="{{ msgGeneral }}" data-wa="nav" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:flex;justify-content:center;align-items:center;min-height:56px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:16px;border-radius:999px">Pedir por WhatsApp</a>
   </div>
 </sc-if>
 
@@ -159,7 +200,7 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
         <p class="pk-lead" style="margin:0;max-width:480px;text-wrap:pretty;animation:peakFade .7s ease both;animation-delay:550ms">Suplementos para el que entrena duro y busca resultados. Stock en Tandil y Bs As, y lo que no tengamos, lo traemos.</p>
         <div class="pk-hero-ctas" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;animation:peakFade .7s ease both;animation-delay:700ms">
           <a class="pk-btn" href="#productos" aria-label="Ver productos" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:15px;border-radius:999px;transition:transform .2s ease, box-shadow .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Ver productos</a>
-          <a class="pk-btn" href="{{ waGeneral }}" data-wa="hero" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;border:1.5px solid #F2F2EE;color:#F2F2EE;font-weight:700;font-size:15px;border-radius:999px;transition:border-color .2s ease, color .2s ease" style-hover="border-color:#6BFF3B;color:#6BFF3B">Pedir por WhatsApp</a>
+          <a class="pk-btn" href="{{ waGeneral }}" data-msg="{{ msgGeneral }}" data-wa="hero" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;border:1.5px solid #F2F2EE;color:#F2F2EE;font-weight:700;font-size:15px;border-radius:999px;transition:border-color .2s ease, color .2s ease" style-hover="border-color:#6BFF3B;color:#6BFF3B">Pedir por WhatsApp</a>
         </div>
       </div>
     </div>
@@ -203,10 +244,10 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
                 <p class="pk-card-price" style="margin:0;font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(28px,2.6vw,34px);letter-spacing:-0.01em;color:#6BFF3B;line-height:1">{{ p.priceLabel }}</p>
                 <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
                   <sc-if value="{{ p.inStock }}" hint-placeholder-val="{{ true }}">
-                    <a class="pk-btn pk-card-btn" href="{{ p.waHref }}" data-wa="producto" data-producto="{{ p.name }}" target="_blank" rel="noopener" aria-label="{{ p.ariaLabel }}" style="display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 26px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:15px;border-radius:999px;transition:box-shadow .2s ease" style-hover="color:#0A0A0A;box-shadow:0 0 0 5px rgba(107,255,59,.18)">Pedir</a>
+                    <a class="pk-btn pk-card-btn" href="{{ p.waHref }}" data-msg="{{ p.msg }}" data-wa="producto" data-producto="{{ p.name }}" target="_blank" rel="noopener" aria-label="{{ p.ariaLabel }}" style="display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 26px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:15px;border-radius:999px;transition:box-shadow .2s ease" style-hover="color:#0A0A0A;box-shadow:0 0 0 5px rgba(107,255,59,.18)">Pedir</a>
                   </sc-if>
                   <sc-if value="{{ p.noStock }}" hint-placeholder-val="{{ false }}">
-                    <a class="pk-btn pk-card-btn" href="{{ p.waHref }}" data-wa="producto" data-producto="{{ p.name }}" target="_blank" rel="noopener" aria-label="{{ p.ariaLabel }}" style="display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border:1.5px solid #6BFF3B;color:#6BFF3B;font-weight:700;font-size:15px;border-radius:999px;transition:background .2s ease, color .2s ease" style-hover="background:#6BFF3B;color:#0A0A0A">Consultar por encargue</a>
+                    <a class="pk-btn pk-card-btn" href="{{ p.waHref }}" data-msg="{{ p.msg }}" data-wa="producto" data-producto="{{ p.name }}" target="_blank" rel="noopener" aria-label="{{ p.ariaLabel }}" style="display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border:1.5px solid #6BFF3B;color:#6BFF3B;font-weight:700;font-size:15px;border-radius:999px;transition:background .2s ease, color .2s ease" style-hover="background:#6BFF3B;color:#0A0A0A">Consultar por encargue</a>
                   </sc-if>
                   
                 </div>
@@ -226,7 +267,7 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
     <div data-reveal="" style="position:relative;max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,48px);display:flex;flex-direction:column;align-items:flex-start;gap:28px">
       <h2 id="encargues-title" style="margin:0;max-width:900px;font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(30px,6.4vw,92px);line-height:0.95;letter-spacing:-0.01em;text-wrap:balance">¿NO ESTÁ LO QUE BUSCÁS?</h2>
       <p class="pk-lead" style="margin:0;max-width:520px;text-wrap:pretty">Trabajamos con gran variedad de marcas. Decinos qué necesitás y te lo conseguimos.</p>
-      <a class="pk-btn" href="{{ waEncargue }}" data-wa="encargue" target="_blank" rel="noopener" aria-label="Hacer un encargue por WhatsApp" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:15px;border-radius:999px;transition:box-shadow .2s ease, transform .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Hacer un encargue</a>
+      <a class="pk-btn" href="{{ waEncargue }}" data-msg="{{ msgEncargue }}" data-wa="encargue" target="_blank" rel="noopener" aria-label="Hacer un encargue por WhatsApp" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:15px;border-radius:999px;transition:box-shadow .2s ease, transform .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Hacer un encargue</a>
     </div>
   </section>
 
@@ -321,7 +362,7 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
     </sc-if>
 
     <div data-reveal="" style="margin-top:clamp(48px,6vw,72px);display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px">
-      <a class="pk-btn pk-btn-lg" href="{{ waGeneral }}" data-wa="cta" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:inline-flex;align-items:center;min-height:56px;padding:0 32px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:16px;border-radius:999px;transition:box-shadow .2s ease, transform .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Pedir por WhatsApp</a>
+      <a class="pk-btn pk-btn-lg" href="{{ waGeneral }}" data-msg="{{ msgGeneral }}" data-wa="cta" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:inline-flex;align-items:center;min-height:56px;padding:0 32px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:16px;border-radius:999px;transition:box-shadow .2s ease, transform .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Pedir por WhatsApp</a>
       
     </div>
   </section>
@@ -375,7 +416,7 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
     <div style="position:relative;max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,48px);display:flex;flex-direction:column;align-items:center;gap:40px">
       <h2 id="cta-title" data-reveal="scale" style="margin:0;font-family:'Archivo',sans-serif;font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:clamp(26px,7.4vw,116px);line-height:0.92;letter-spacing:-0.01em;text-wrap:balance">ENTRENÁS DURO.<br>SUPLEMENTATE BIEN<span style="color:#6BFF3B">.</span></h2>
       <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px">
-        <a class="pk-btn pk-btn-lg" href="{{ waGeneral }}" data-wa="cta" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:inline-flex;align-items:center;min-height:56px;padding:0 32px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:16px;border-radius:999px;transition:box-shadow .2s ease, transform .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Pedir por WhatsApp</a>
+        <a class="pk-btn pk-btn-lg" href="{{ waGeneral }}" data-msg="{{ msgGeneral }}" data-wa="cta" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp" style="display:inline-flex;align-items:center;min-height:56px;padding:0 32px;background:#6BFF3B;color:#0A0A0A;font-weight:700;font-size:16px;border-radius:999px;transition:box-shadow .2s ease, transform .2s ease" style-hover="color:#0A0A0A;transform:translateY(-2px);box-shadow:0 0 0 5px rgba(107,255,59,.18)">Pedir por WhatsApp</a>
         <a class="pk-btn pk-btn-lg" href="{{ igUrl }}" target="_blank" rel="noopener" aria-label="Escribinos en Instagram" style="display:inline-flex;align-items:center;min-height:56px;padding:0 32px;border:1.5px solid #F2F2EE;color:#F2F2EE;font-weight:700;font-size:16px;border-radius:999px;transition:border-color .2s ease, color .2s ease" style-hover="border-color:#6BFF3B;color:#6BFF3B">Escribinos en Instagram</a>
       </div>
     </div>
@@ -392,9 +433,10 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
         Tandil / Bs As
       </p>
     </div>
-    <div style="order:2;display:flex;align-items:center;gap:28px">
+    <div style="order:2;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 28px">
       <a href="https://ig.me/m/peak_suplements" target="_blank" rel="noopener" aria-label="Escribir a PEAK por Instagram" style="display:inline-flex;align-items:center;min-height:44px;color:#F2F2EE;font-size:15px;font-weight:400;background-image:linear-gradient(#6BFF3B,#6BFF3B);background-repeat:no-repeat;background-position:0 calc(100% - 10px);background-size:0% 1.5px;transition:background-size .35s cubic-bezier(.2,.7,.2,1), color .2s ease" style-hover="color:#6BFF3B;background-size:100% 1.5px">Instagram</a>
-      <a href="{{ waGeneral }}" data-wa="cta" target="_blank" rel="noopener" aria-label="Escribir a PEAK por WhatsApp" style="display:inline-flex;align-items:center;min-height:44px;color:#F2F2EE;font-size:15px;font-weight:400;background-image:linear-gradient(#6BFF3B,#6BFF3B);background-repeat:no-repeat;background-position:0 calc(100% - 10px);background-size:0% 1.5px;transition:background-size .35s cubic-bezier(.2,.7,.2,1), color .2s ease" style-hover="color:#6BFF3B;background-size:100% 1.5px">WhatsApp</a>
+      <a href="{{ waTandil }}" data-wa-directo="tandil" target="_blank" rel="noopener" aria-label="Escribir a PEAK Tandil por WhatsApp" style="display:inline-flex;align-items:center;min-height:44px;color:#F2F2EE;font-size:15px;font-weight:400;background-image:linear-gradient(#6BFF3B,#6BFF3B);background-repeat:no-repeat;background-position:0 calc(100% - 10px);background-size:0% 1.5px;transition:background-size .35s cubic-bezier(.2,.7,.2,1), color .2s ease" style-hover="color:#6BFF3B;background-size:100% 1.5px">WhatsApp Tandil</a>
+      <a href="{{ waCaba }}" data-wa-directo="caba" target="_blank" rel="noopener" aria-label="Escribir a PEAK CABA por WhatsApp" style="display:inline-flex;align-items:center;min-height:44px;color:#F2F2EE;font-size:15px;font-weight:400;background-image:linear-gradient(#6BFF3B,#6BFF3B);background-repeat:no-repeat;background-position:0 calc(100% - 10px);background-size:0% 1.5px;transition:background-size .35s cubic-bezier(.2,.7,.2,1), color .2s ease" style-hover="color:#6BFF3B;background-size:100% 1.5px">WhatsApp CABA</a>
     </div>
   </div>
   <p style="margin:0;padding:0 20px 14px;text-align:center;color:#8C8C8C;font-size:12px">Precios sujetos a cambio sin previo aviso.</p>
@@ -408,13 +450,13 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
   </div>
 </footer>
 
-<a class="pk-fab" href="{{ waGeneral }}" data-wa="flotante" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp" style="position:fixed;right:20px;bottom:20px;z-index:40;width:60px;height:60px;border-radius:999px;background:#6BFF3B;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.5);transition:opacity .3s ease, transform .3s ease;opacity:{{ fabOpacity }};transform:{{ fabTransform }};pointer-events:{{ fabPointer }}">
+<a class="pk-fab" href="{{ waGeneral }}" data-msg="{{ msgGeneral }}" data-wa="flotante" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp" style="position:fixed;right:20px;bottom:20px;z-index:40;width:60px;height:60px;border-radius:999px;background:#6BFF3B;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.5);transition:opacity .3s ease, transform .3s ease;opacity:{{ fabOpacity }};transform:{{ fabTransform }};pointer-events:{{ fabPointer }}">
   <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path fill="#0A0A0A" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2Zm0 18.15a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.24 8.24 0 1 1 6.98 3.86Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"></path></svg>
 </a>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;titulares&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Archivo ancho&quot;,&quot;Archivo Black&quot;],&quot;default&quot;:&quot;Archivo ancho&quot;,&quot;tsType&quot;:&quot;'Archivo ancho'|'Archivo Black'&quot;,&quot;section&quot;:&quot;Tipografía&quot;},&quot;pasosEstilo&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Timeline&quot;,&quot;Cards&quot;,&quot;Vertical&quot;],&quot;default&quot;:&quot;Cards&quot;,&quot;tsType&quot;:&quot;'Timeline'|'Cards'|'Vertical'&quot;,&quot;section&quot;:&quot;Cómo pedir&quot;},&quot;showVideo&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hero&quot;}}">
 // ── Datos editables: actualizá precios y stock acá ──
-const WA_NUMBER = '5491126320965'; // único lugar con el número de WhatsApp (549 + característica + número, sin +)
+// Los números de WhatsApp por ciudad están en CONTACTOS, dentro de ciudad.js.
 const IG_URL = 'https://ig.me/m/peak_suplements';
 
 // Secciones ocultas hasta tener el contenido. Cambiá a true para volver a mostrarlas.
@@ -432,7 +474,8 @@ const PRODUCTS = [
   { name: 'Whey Protein Star Nutrition', flavors: ['Vainilla', 'Chocolate'], description: 'Proteína de alta calidad y aislado de hidrolizado', price: 93000, image: '', stock: false, hidden: true },
 ];
 
-// Mensajes de WhatsApp (\n = salto de línea). wa() los pasa por encodeURIComponent, así llegan bien los emojis.
+// Mensajes de WhatsApp (\n = salto de línea). ciudad.js completa "Entrega o retiro en: ___ 📍" con la ciudad elegida
+// y los pasa por encodeURIComponent, así llegan bien los emojis.
 const MSG_GENERAL = 'Hola Peak! 👋 Quiero hacer una consulta 💪';
 const MSG_ENCARGUE = 'Hola Peak! 👋 Quiero encargar: ___ 📦 Entrega o retiro en: ___ 📍';
 const msgProducto = (p, precio) => [
@@ -456,24 +499,26 @@ class Component extends DCLogic {
   state = {
     scrolled: false, showFab: false, menuOpen: false, openFaq: -1, hover: -1,
     isMobile: typeof window !== 'undefined' && window.innerWidth < 820,
+    // El nav completo (links + indicador de ciudad + Pedir) necesita ~1100px; por debajo se usa la hamburguesa.
+    navCompact: typeof window !== 'undefined' && window.innerWidth < 1100,
     reduced: typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   };
   heroContentRef = React.createRef(); videoRef = React.createRef(); encargueRef = React.createRef();
   parallaxRef = React.createRef(); stepsRef = React.createRef(); lineRef = React.createRef(); sliderRef = React.createRef(); footerRef = React.createRef();
   sliderPaused = false; drag = null;
 
-  wa(msg) { return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`; }
+  // La URL real la arma ciudad.js (número de la ciudad guardada). Sin ciudad, el click abre el selector.
+  wa(msg) { return window.PeakCiudad ? window.PeakCiudad.waUrl(msg) : '#'; }
 
   componentDidMount() {
     this.onScroll = () => this.handleScroll();
-    this.onResize = () => { const m = window.innerWidth < 820; if (m !== this.state.isMobile) this.setState({ isMobile: m }); this.handleScroll(); };
-    // Analytics: un solo listener para todos los links de WhatsApp (cada uno tiene data-wa="origen").
-    this.onWaClick = e => {
-      const a = e.target.closest && e.target.closest('a[data-wa]');
-      if (!a || typeof window.va !== 'function') return;
-      window.va('event', { name: 'click_whatsapp', data: { origen: a.getAttribute('data-wa'), producto: a.getAttribute('data-producto') || null } });
+    this.onResize = () => {
+      const m = window.innerWidth < 820, nc = window.innerWidth < 1100;
+      if (m !== this.state.isMobile || nc !== this.state.navCompact) this.setState({ isMobile: m, navCompact: nc });
+      this.handleScroll();
     };
-    document.addEventListener('click', this.onWaClick);
+    // Clicks de WhatsApp, selector y analytics: los maneja ciudad.js. Acá solo re-renderizamos al cambiar de ciudad.
+    this.offCiudad = window.PeakCiudad ? window.PeakCiudad.onChange(c => this.setState({ ciudad: c })) : null;
     window.addEventListener('scroll', this.onScroll, { passive: true });
     window.addEventListener('resize', this.onResize);
     const v = this.videoRef.current; if (v) { v.muted = true; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
@@ -483,7 +528,7 @@ class Component extends DCLogic {
   }
   componentWillUnmount() {
     window.removeEventListener('scroll', this.onScroll); window.removeEventListener('resize', this.onResize);
-    document.removeEventListener('click', this.onWaClick);
+    if (this.offCiudad) this.offCiudad();
     if (this.io) this.io.disconnect(); cancelAnimationFrame(this.raf);
   }
   componentDidUpdate() { this.handleScroll(); this.applyHeadlineFont(); }
@@ -562,6 +607,7 @@ class Component extends DCLogic {
 
   renderVals() {
     const s = this.state;
+    const ciudadNombre = window.PeakCiudad ? window.PeakCiudad.nombre() : null;
     const showVideoProp = this.props.showVideo ?? true;
     const pasos = this.props.pasosEstilo ?? 'Timeline';
     const products = PRODUCTS.filter(p => !p.hidden).map((p, i) => ({
@@ -571,6 +617,7 @@ class Component extends DCLogic {
       priceLabel: fmtPrice(p.price),
       inStock: p.stock, noStock: !p.stock,
       delay: String(i * 90),
+      msg: p.stock ? msgProducto(p, fmtPrice(p.price)) : msgSinStock(p),
       waHref: this.wa(p.stock ? msgProducto(p, fmtPrice(p.price)) : msgSinStock(p)),
       ariaLabel: p.stock ? `Pedir ${p.name} por WhatsApp` : `Consultar por encargue ${p.name} por WhatsApp`,
       igLabel: `Consultar ${p.name} por Instagram`,
@@ -582,6 +629,7 @@ class Component extends DCLogic {
     const ventas = [...base, ...base].map((src, i) => ({ src, dup: i >= 6, alt: `Entrega real de PEAK, foto ${(i % 6) + 1}` }));
     return {
       isMobile: s.isMobile, isDesktop: !s.isMobile, menuOpen: s.menuOpen,
+      navCompact: s.navCompact, navFull: !s.navCompact,
       openMenu: () => this.setState({ menuOpen: true }),
       closeMenu: () => this.setState({ menuOpen: false }),
       navBg: s.scrolled || s.menuOpen ? 'rgba(10,10,10,.8)' : 'rgba(10,10,10,0)',
@@ -591,8 +639,14 @@ class Component extends DCLogic {
       heroPoster: s.isMobile ? 'uploads/hero-mobile.png' : 'uploads/hero-product.png',
       heroContentRef: this.heroContentRef, videoRef: this.videoRef, encargueRef: this.encargueRef,
       parallaxRef: this.parallaxRef, stepsRef: this.stepsRef, lineRef: this.lineRef, sliderRef: this.sliderRef,
+      msgGeneral: MSG_GENERAL, msgEncargue: MSG_ENCARGUE,
       waGeneral: this.wa(MSG_GENERAL),
       waEncargue: this.wa(MSG_ENCARGUE),
+      waTandil: window.PeakCiudad ? window.PeakCiudad.waDirecto('tandil', MSG_GENERAL) : '#',
+      waCaba: window.PeakCiudad ? window.PeakCiudad.waDirecto('caba', MSG_GENERAL) : '#',
+      hasCiudad: !!ciudadNombre,
+      ciudadTexto: ciudadNombre || 'Elegí tu ciudad',
+      ciudadAria: ciudadNombre ? `Ciudad: ${ciudadNombre}. Cambiar ciudad` : 'Elegí tu ciudad',
       showVentas: SHOW_VENTAS, showFaq: SHOW_FAQ,
       igUrl: IG_URL,
       marqueeItems: MARQUEE,
