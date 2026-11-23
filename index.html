@@ -42,14 +42,22 @@
 .pk-city__desc{margin:0;color:#8C8C8C;font-size:15px;line-height:1.5}
 .pk-city__list{display:flex;flex-direction:column;gap:12px}
 .pk-city__opt{width:100%;display:flex;align-items:center;gap:16px;min-height:84px;padding:18px 20px;background:#0A0A0A;border:1.5px solid #262626;border-radius:14px;color:#F2F2EE;font:inherit;text-align:left;cursor:pointer;transition:border-color .2s ease}
-.pk-city__opt.is-actual{border-color:rgba(107,255,59,.45)}
+.pk-city__opt.is-ultima{border-color:rgba(107,255,59,.45)}
 .pk-city__opt:hover,.pk-city__opt:focus-visible{border-color:#6BFF3B;outline:none}
+/* La última ciudad recibe el foco al abrir: conserva el borde suave hasta que se navega con teclado (Tab / flechas) */
+.pk-city__dialog:not([data-teclado]) .pk-city__opt.is-ultima:focus-visible:not(:hover){border-color:rgba(107,255,59,.45)}
 .pk-city__pin{flex-shrink:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:1px solid #262626;border-radius:12px;background:#151515}
 .pk-city__txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
 .pk-city__name{font-variation-settings:'wdth' 125;font-weight:800;text-transform:uppercase;font-size:22px;line-height:1.05;letter-spacing:-0.01em}
 .pk-city__sub{color:#8C8C8C;font-size:14px;line-height:1.4}
-.pk-city__actual{display:none;flex-shrink:0;color:#6BFF3B;font-size:12px;font-weight:700;letter-spacing:.04em}
-.pk-city__opt.is-actual .pk-city__actual{display:inline}
+/* "Última vez": en mobile va debajo del subtexto (así "CABA / BS AS" entra en una línea); en desktop, a la derecha */
+.pk-city__ultima{display:none;color:#6BFF3B;font-size:12px;font-weight:700;letter-spacing:.04em;white-space:nowrap}
+.pk-city__opt.is-ultima .pk-city__ultima{display:block}
+@media (min-width:820px){
+  .pk-city__opt{position:relative}
+  .pk-city__opt.is-ultima{padding-right:104px}
+  .pk-city__ultima{position:absolute;right:20px;top:50%;transform:translateY(-50%)}
+}
 .pk-city__cancel{align-self:center;min-height:44px;padding:0 16px;background:transparent;border:0;color:#8C8C8C;font:inherit;font-size:14px;font-weight:600;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
 .pk-city__cancel:hover{color:#F2F2EE}
 @media (max-width:819px){
@@ -58,11 +66,6 @@
   .pk-city__handle{display:block}
 }
 @media (prefers-reduced-motion:reduce){.pk-city__overlay,.pk-city__dialog{animation:none}}
-/* Línea "Pedís desde … · cambiar" del footer (solo si hay ciudad guardada) */
-.pk-foot-ciudad{margin:0;color:#8C8C8C;font-size:13px;line-height:1.5}
-.pk-foot-ciudad button{padding:4px 2px;background:transparent;border:0;color:#8C8C8C;font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
-.pk-foot-ciudad button:hover{color:#F2F2EE}
-@media (max-width:819px){.pk-foot-ciudad{margin-top:-10px}}
 </style>
 <!-- Selector de ciudad + única función de WhatsApp. Los números están en CONTACTOS, dentro de ciudad.js -->
 <script src="./ciudad.js"></script>
@@ -430,10 +433,6 @@ h1,h2,h3,.pk-balance{text-wrap:balance!important}
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6BFF3B" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg>
         Tandil / Bs As
       </p>
-      <!-- Cambio de ciudad: solo aparece si ya hay una ciudad guardada (abre el selector sin mandar mensaje) -->
-      <sc-if value="{{ hasCiudad }}" hint-placeholder-val="{{ false }}">
-        <p class="pk-foot-ciudad" style="order:1">Pedís desde {{ ciudadTexto }} · <button type="button" data-ciudad-abrir="" aria-label="Cambiar ciudad (ahora: {{ ciudadTexto }})">cambiar</button></p>
-      </sc-if>
     </div>
     <div style="order:2;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 28px">
       <a href="https://ig.me/m/peak_suplements" target="_blank" rel="noopener" aria-label="Escribir a PEAK por Instagram" style="display:inline-flex;align-items:center;min-height:44px;color:#F2F2EE;font-size:15px;font-weight:400;background-image:linear-gradient(#6BFF3B,#6BFF3B);background-repeat:no-repeat;background-position:0 calc(100% - 10px);background-size:0% 1.5px;transition:background-size .35s cubic-bezier(.2,.7,.2,1), color .2s ease" style-hover="color:#6BFF3B;background-size:100% 1.5px">Instagram</a>
@@ -507,7 +506,8 @@ class Component extends DCLogic {
   parallaxRef = React.createRef(); stepsRef = React.createRef(); lineRef = React.createRef(); sliderRef = React.createRef(); footerRef = React.createRef();
   sliderPaused = false; drag = null;
 
-  // La URL real la arma ciudad.js (número de la ciudad guardada). Sin ciudad, el click abre el selector.
+  // El click en cualquier botón de WhatsApp abre siempre el selector (ciudad.js). Este href solo se usa si alguien
+  // abre el link sin hacer click (mantener apretado / copiar): apunta a la última ciudad elegida.
   wa(msg) { return window.PeakCiudad ? window.PeakCiudad.waUrl(msg) : '#'; }
 
   componentDidMount() {
@@ -603,7 +603,6 @@ class Component extends DCLogic {
 
   renderVals() {
     const s = this.state;
-    const ciudadNombre = window.PeakCiudad ? window.PeakCiudad.nombre() : null;
     const showVideoProp = this.props.showVideo ?? true;
     const pasos = this.props.pasosEstilo ?? 'Timeline';
     const products = PRODUCTS.filter(p => !p.hidden).map((p, i) => ({
@@ -639,8 +638,6 @@ class Component extends DCLogic {
       waEncargue: this.wa(MSG_ENCARGUE),
       waTandil: window.PeakCiudad ? window.PeakCiudad.waDirecto('tandil', MSG_GENERAL) : '#',
       waCaba: window.PeakCiudad ? window.PeakCiudad.waDirecto('caba', MSG_GENERAL) : '#',
-      hasCiudad: !!ciudadNombre,
-      ciudadTexto: ciudadNombre || 'Elegí tu ciudad',
       showVentas: SHOW_VENTAS, showFaq: SHOW_FAQ,
       igUrl: IG_URL,
       marqueeItems: MARQUEE,

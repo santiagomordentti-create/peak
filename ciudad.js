@@ -4,11 +4,11 @@
  *   data-wa="origen"          (producto | hero | nav | flotante | encargue | cta)
  *   data-msg="mensaje"        (texto a precargar; "Entrega o retiro en: ___ 📍" se completa con la ciudad)
  *   data-producto="nombre"    (solo en las cards)
- * y pasan por abrirWhatsApp(). Si no hay ciudad guardada, se abre el selector y, al elegir,
- * se abre WhatsApp con el número de esa ciudad y el mensaje de ESE botón.
+ * y pasan por abrirWhatsApp(), que SIEMPRE abre el selector. Al elegir, se abre WhatsApp con el número
+ * de esa ciudad y el mensaje de ESE botón. La última ciudad elegida se recuerda solo para marcarla
+ * ("Última vez") y darle el foco inicial.
  *
  * Links directos sin selector (footer): data-wa-directo="tandil" | "caba".
- * Botones que solo abren el selector, sin mandar mensaje (el "cambiar" del footer): data-ciudad-abrir.
  */
 (function () {
   'use strict';
@@ -21,7 +21,7 @@
   var CLAVE = 'peak_ciudad';
   var PLACEHOLDER = /Entrega o retiro en: ___ 📍/g;
 
-  // ── Estado (localStorage con try/catch: en modo privado o con storage bloqueado, simplemente no recuerda) ──
+  // ── Última ciudad elegida (localStorage con try/catch: en modo privado o con storage bloqueado, no se marca ninguna) ──
   function leerCiudad() { try { var c = localStorage.getItem(CLAVE); return CONTACTOS[c] ? c : null; } catch (e) { return null; } }
   function guardarCiudad(c) { try { localStorage.setItem(CLAVE, c); } catch (e) {} }
   var ciudad = leerCiudad();
@@ -35,15 +35,10 @@
   function mensajePara(c, msg) { return String(msg || '').replace(PLACEHOLDER, 'Entrega o retiro en: ' + CONTACTOS[c].nombre + ' 📍'); }
   function waUrl(c, msg) { return 'https://wa.me/' + CONTACTOS[c].numero + '?text=' + encodeURIComponent(mensajePara(c, msg)); }
 
-  // Única función por la que pasan todos los botones de WhatsApp.
-  // Devuelve la URL si ya hay ciudad (para dejar seguir la navegación del <a>), o null si abrió el selector.
+  // Única función por la que pasan todos los botones de WhatsApp: siempre abre el selector
+  // y guarda qué mensaje mandar cuando se elija la ciudad.
   function abrirWhatsApp(opts, opener) {
-    if (ciudad) {
-      track('click_whatsapp', { ciudad: ciudad, origen: opts.origen, producto: opts.producto || null });
-      return waUrl(ciudad, opts.msg);
-    }
     abrirSelector(opener, opts);
-    return null;
   }
 
   // ── Selector (modal en desktop, bottom sheet en mobile: lo decide el CSS con @media) ──
@@ -74,8 +69,7 @@
       b.setAttribute('data-ciudad', c);
       b.innerHTML =
         '<span class="pk-city__pin" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6BFF3B" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>' +
-        '<span class="pk-city__txt"><span class="pk-city__name"></span><span class="pk-city__sub"></span></span>' +
-        '<span class="pk-city__actual">Actual</span>';
+        '<span class="pk-city__txt"><span class="pk-city__name"></span><span class="pk-city__sub"></span><span class="pk-city__ultima">Última vez</span></span>';
       b.querySelector('.pk-city__name').textContent = k.nombre;
       b.querySelector('.pk-city__sub').textContent = k.sub;
       lista.appendChild(b);
@@ -90,14 +84,15 @@
 
   function pintarOpciones() {
     [].forEach.call(lista.querySelectorAll('[data-ciudad]'), function (b) {
-      var c = b.getAttribute('data-ciudad'), actual = c === ciudad;
-      b.classList.toggle('is-actual', actual);
-      b.setAttribute('aria-label', CONTACTOS[c].nombre + '. ' + CONTACTOS[c].sub + (actual ? '. Ciudad actual' : ''));
+      var c = b.getAttribute('data-ciudad'), ultima = c === ciudad;
+      b.classList.toggle('is-ultima', ultima);
+      b.setAttribute('aria-label', CONTACTOS[c].nombre + '. ' + CONTACTOS[c].sub + (ultima ? '. Elegida la última vez' : ''));
     });
   }
 
   function onKey(e) {
     if (e.key === 'Escape') { e.preventDefault(); cerrarSelector(); return; }
+    if (/^(Tab|Arrow)/.test(e.key)) dialogo.setAttribute('data-teclado', '');
     if (e.key !== 'Tab') return;
     var f = [].slice.call(dialogo.querySelectorAll('button,[href],[tabindex]:not([tabindex="-1"])'));
     if (!f.length) return;
@@ -113,10 +108,12 @@
     pendiente = opts || null;
     pintarOpciones();
     if (!raiz.hidden) return;
+    dialogo.removeAttribute('data-teclado');
     raiz.hidden = false;
     document.documentElement.style.overflow = 'hidden';
     document.addEventListener('keydown', onKey);
-    var b = lista.querySelector('button');
+    // Foco inicial en la última ciudad elegida (se confirma con un toque o con Enter); si no hay, en la primera.
+    var b = (ciudad && lista.querySelector('[data-ciudad="' + ciudad + '"]')) || lista.querySelector('button');
     if (b) b.focus({ preventScroll: true });
   }
 
@@ -148,9 +145,6 @@
     if (e.defaultPrevented || e.button > 0 || !e.target.closest) return;
     var t = e.target;
 
-    var abrir = t.closest('[data-ciudad-abrir]');
-    if (abrir) { e.preventDefault(); abrirSelector(abrir, null); return; }
-
     var directo = t.closest('a[data-wa-directo]');
     if (directo) {
       track('click_whatsapp', { ciudad: directo.getAttribute('data-wa-directo'), origen: 'footer', producto: null });
@@ -159,9 +153,8 @@
 
     var a = t.closest('a[data-wa]');
     if (!a) return;
-    var url = abrirWhatsApp({ origen: a.getAttribute('data-wa'), producto: a.getAttribute('data-producto'), msg: a.getAttribute('data-msg') }, a);
-    if (url) a.href = url; // con ciudad: sigue la navegación normal del <a target="_blank">
-    else e.preventDefault(); // sin ciudad: se abrió el selector
+    e.preventDefault(); // WhatsApp se abre recién al elegir la ciudad en el selector
+    abrirWhatsApp({ origen: a.getAttribute('data-wa'), producto: a.getAttribute('data-producto'), msg: a.getAttribute('data-msg') }, a);
   }, true);
 
   // ── API para la landing ──
